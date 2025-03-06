@@ -1,0 +1,19 @@
+<p>login works!</p>
+
+<div>
+  <form class="login">
+    <input
+      type="email"
+      name="login"
+      [(ngModel)]="loginObj.login"
+      placeholder="username"
+    />
+    <input
+      type="password"
+      name="password"
+      [(ngModel)]="loginObj.password"
+      placeholder="password"
+    />
+    <button (click)="onLogin()">Log in</button>
+  </form>
+</div>
