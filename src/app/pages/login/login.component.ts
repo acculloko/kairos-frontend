@@ -22,6 +22,8 @@ export class LoginComponent {
 
   onLogin() {
     console.log(this.loginObj);
+    // removes token so that every login gets a new token
+    localStorage.removeItem('Token');
     this.userService
       .login(this.loginObj)
       .pipe(

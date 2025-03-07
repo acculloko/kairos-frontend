@@ -1,1 +1,15 @@
-<p>home works!</p>
+<mat-toolbar class="custom-elevation">
+  <!-- <button mat-icon-button>
+    <mat-icon>menu</mat-icon>
+  </button> -->
+  <span>Kairos</span>
+</mat-toolbar>
+
+<mat-sidenav-container>
+  <mat-sidenav opened mode="side" [style.width]="'250px'">
+    <app-custom-sidenav />
+  </mat-sidenav>
+  <mat-sidenav-content class="content">
+    <router-outlet />
+  </mat-sidenav-content>
+</mat-sidenav-container>

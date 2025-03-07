@@ -1,0 +1,29 @@
+.sidenav-header {
+  padding-top: 24px;
+  text-align: center;
+}
+
+.user-icon {
+  font-size: 100px;
+  width: 100px;
+  height: 100px;
+}
+
+.header-text {
+  > h2 {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
+  > p {
+    margin: 0;
+    font-size: 0.8rem;
+  }
+}
+
+mat-nav-list {
+  > a {
+    border-radius: 0;
+  }
+}

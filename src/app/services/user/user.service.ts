@@ -1,3 +1,4 @@
+import { RegisterRequest } from './../../models/user/registerRequest.type';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { LoginRequest } from '../../models/user/loginRequest.type';
@@ -21,5 +22,10 @@ export class UserService {
 
   getUsers() {
     return this.http.get<Array<User>>(`${this.API_URL}/user`);
+  }
+
+  createUser(registerRequest: RegisterRequest) {
+    console.log('creating user');
+    return this.http.post<User>(`http://localhost:8080/user`, registerRequest);
   }
 }
