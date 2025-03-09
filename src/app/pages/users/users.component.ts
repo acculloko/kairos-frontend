@@ -1,5 +1,5 @@
 import { RegisterRequest } from './../../models/user/registerRequest.type';
-import { JsonPipe } from '@angular/common';
+import { CommonModule, JsonPipe } from '@angular/common';
 import { Component, inject, NgZone, OnInit } from '@angular/core';
 import { UserService } from '../../services/user/user.service';
 import { User } from '../../models/user/user.type';
@@ -9,16 +9,18 @@ import { MatButtonModule } from '@angular/material/button';
 import { UserCreationFormComponent } from '../../components/user-creation-form/user-creation-form.component';
 import { UserEditingFormComponent } from '../../components/user-editing-form/user-editing-form.component';
 import { UserDeleteConfirmationComponent } from '../../components/user-delete-confirmation/user-delete-confirmation.component';
+import { DateService } from '../../services/date.service';
 
 @Component({
   selector: 'app-users',
-  imports: [MatTableModule, MatButtonModule],
+  imports: [MatTableModule, MatButtonModule, CommonModule],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
 })
 export class UsersComponent implements OnInit {
   dialog = inject(MatDialog);
   userService = inject(UserService);
+  dateService = inject(DateService);
   ngZone = inject(NgZone);
   // MatTable
   displayedColumns: string[] = [
@@ -38,12 +40,16 @@ export class UsersComponent implements OnInit {
 
   getAllUsers() {
     this.userService.getUsers().subscribe((res: any) => {
-      this.userList = res;
-      this.userList.forEach((entry) => {
-        if (!entry.last_login) {
-          entry.last_login = 'Never';
-        }
-      });
+      this.userList = res.map((user: User) => ({
+        ...user,
+        creation_date: this.dateService.parseDate(
+          user.creation_date,
+          'dd/MM/yyyy HH:mm:ss'
+        ),
+        last_login: user.last_login
+          ? this.dateService.parseDate(user.last_login, 'dd/MM/yyyy HH:mm:ss')
+          : null,
+      }));
     });
   }
 

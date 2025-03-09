@@ -3,6 +3,8 @@ import { LoginComponent } from './pages/login/login.component';
 import { HomeComponent } from './pages/home/home.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { UsersComponent } from './pages/users/users.component';
+import { ProjectsComponent } from './pages/projects/projects.component';
+import { ProjectDetailsComponent } from './components/project-details/project-details.component';
 
 export const routes: Routes = [
   {
@@ -25,6 +27,14 @@ export const routes: Routes = [
       {
         path: 'users',
         component: UsersComponent,
+      },
+      {
+        path: 'projects',
+        component: ProjectsComponent,
+      },
+      {
+        path: 'projects/:id',
+        component: ProjectDetailsComponent,
       },
     ],
   },

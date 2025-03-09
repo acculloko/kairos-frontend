@@ -30,19 +30,16 @@ export class UserService {
 
   createUser(registerRequest: RegisterRequest) {
     console.log('creating user');
-    return this.http.post<User>(`http://localhost:8080/user`, registerRequest);
+    return this.http.post<User>(`${this.API_URL}/user`, registerRequest);
   }
 
   editUser(registerRequest: RegisterRequest, id: number) {
     console.log('editing user');
-    return this.http.put<User>(
-      `http://localhost:8080/user/${id}`,
-      registerRequest
-    );
+    return this.http.put<User>(`${this.API_URL}/user/${id}`, registerRequest);
   }
 
   deleteUser(id: number) {
     console.log('deleting user');
-    return this.http.delete<User>(`http://localhost:8080/user/${id}`);
+    return this.http.delete<User>(`${this.API_URL}/user/${id}`);
   }
 }
