@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject, inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -6,13 +6,18 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogModule,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { UserService } from '../../services/user/user.service';
 
 @Component({
-  selector: 'app-user-form',
+  selector: 'app-user-editing-form',
   imports: [
     MatFormFieldModule,
     ReactiveFormsModule,
@@ -21,21 +26,29 @@ import { MatSelectModule } from '@angular/material/select';
     MatButtonModule,
     MatSelectModule,
   ],
-  templateUrl: './user-form.component.html',
-  styleUrl: './user-form.component.scss',
+  templateUrl: './user-editing-form.component.html',
+  styleUrl: './user-editing-form.component.scss',
 })
-export class UserFormComponent {
+export class UserEditingFormComponent implements OnInit {
   form: FormGroup;
+  userService = inject(UserService);
 
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<UserFormComponent>
+    private dialogRef: MatDialogRef<UserEditingFormComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { id: number }
   ) {
     this.form = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       role: ['', Validators.required],
+    });
+  }
+
+  ngOnInit(): void {
+    this.userService.getUserById(this.data.id).subscribe((entry) => {
+      this.form.patchValue(entry);
     });
   }
 

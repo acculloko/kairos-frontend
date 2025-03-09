@@ -24,8 +24,25 @@ export class UserService {
     return this.http.get<Array<User>>(`${this.API_URL}/user`);
   }
 
+  getUserById(id: number) {
+    return this.http.get<User>(`${this.API_URL}/user/${id}`);
+  }
+
   createUser(registerRequest: RegisterRequest) {
     console.log('creating user');
     return this.http.post<User>(`http://localhost:8080/user`, registerRequest);
+  }
+
+  editUser(registerRequest: RegisterRequest, id: number) {
+    console.log('editing user');
+    return this.http.put<User>(
+      `http://localhost:8080/user/${id}`,
+      registerRequest
+    );
+  }
+
+  deleteUser(id: number) {
+    console.log('deleting user');
+    return this.http.delete<User>(`http://localhost:8080/user/${id}`);
   }
 }
