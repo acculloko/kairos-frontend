@@ -1,19 +1,39 @@
 import { RegisterRequest } from './../../models/user/registerRequest.type';
 import { CommonModule, JsonPipe } from '@angular/common';
-import { Component, inject, NgZone, OnInit } from '@angular/core';
+import { Component, inject, NgZone, OnInit, ViewChild } from '@angular/core';
 import { UserService } from '../../services/user/user.service';
 import { User } from '../../models/user/user.type';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MatTableModule } from '@angular/material/table';
+import {
+  MatTable,
+  MatTableDataSource,
+  MatTableModule,
+} from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { UserCreationFormComponent } from '../../components/user-creation-form/user-creation-form.component';
 import { UserEditingFormComponent } from '../../components/user-editing-form/user-editing-form.component';
 import { UserDeleteConfirmationComponent } from '../../components/user-delete-confirmation/user-delete-confirmation.component';
 import { DateService } from '../../services/date.service';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-users',
-  imports: [MatTableModule, MatButtonModule, CommonModule],
+  imports: [
+    MatTableModule,
+    MatButtonModule,
+    CommonModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    FormsModule,
+  ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
 })
@@ -22,7 +42,11 @@ export class UsersComponent implements OnInit {
   userService = inject(UserService);
   dateService = inject(DateService);
   ngZone = inject(NgZone);
+
   // MatTable
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+
   displayedColumns: string[] = [
     'id',
     'name',
@@ -32,25 +56,82 @@ export class UsersComponent implements OnInit {
     'role',
     'actions',
   ];
+
+  selectedFilterField: string = 'name';
+  filterableFields = [
+    { label: 'Id', value: 'id' },
+    { label: 'Name', value: 'name' },
+    { label: 'Email', value: 'email' },
+    { label: 'Role', value: 'role' },
+    { label: 'Creation Date', value: 'creation_date' },
+    { label: 'Last Login', value: 'last_login' },
+  ];
+
   userList: Array<User> = [];
+  userDataSource = new MatTableDataSource<User>();
 
   ngOnInit(): void {
     this.getAllUsers();
   }
 
   getAllUsers() {
-    this.userService.getUsers().subscribe((res: any) => {
-      this.userList = res.map((user: User) => ({
-        ...user,
-        creation_date: this.dateService.parseDate(
-          user.creation_date,
-          'dd/MM/yyyy HH:mm:ss'
-        ),
-        last_login: user.last_login
-          ? this.dateService.parseDate(user.last_login, 'dd/MM/yyyy HH:mm:ss')
-          : null,
-      }));
+    this.userService.getUsers().subscribe({
+      next: (response: any) => {
+        this.userList = response.map((user: User) => ({
+          ...user,
+          creation_date: this.dateService.parseDate(
+            user.creation_date,
+            'dd/MM/yyyy HH:mm:ss'
+          ),
+          last_login: user.last_login
+            ? this.dateService.parseDate(user.last_login, 'dd/MM/yyyy HH:mm:ss')
+            : null,
+        }));
+
+        this.userDataSource = new MatTableDataSource<User>(this.userList);
+        console.log(this.userDataSource);
+      },
+      error: (err) => {
+        console.error(err);
+        throw err;
+      },
+      complete: () => {
+        this.userDataSource.paginator = this.paginator;
+        this.userDataSource.sort = this.sort;
+        this.setupFilterPredicate();
+      },
     });
+  }
+
+  onSearch(event: Event) {
+    const searchValue = (event.target as HTMLInputElement).value;
+    this.userDataSource.filter = searchValue.trim().toLowerCase();
+  }
+
+  setupFilterPredicate() {
+    this.userDataSource.filterPredicate = (data: any, filter: string) => {
+      if (!this.selectedFilterField || !filter) return true;
+
+      let fieldValue: string;
+
+      if (this.selectedFilterField === 'id') {
+        fieldValue = data.id.toString();
+      } else if (this.selectedFilterField === 'creation_date') {
+        fieldValue = this.dateService.formatDate(
+          data.creation_date,
+          'dd/MM/yyyy HH:mm:ss'
+        );
+      } else if (this.selectedFilterField === 'last_login') {
+        fieldValue = this.dateService.formatDate(
+          data.last_login,
+          'dd/MM/yyyy HH:mm:ss'
+        );
+      } else {
+        fieldValue = (data[this.selectedFilterField] as string) || '';
+      }
+
+      return fieldValue.toLowerCase().includes(filter);
+    };
   }
 
   createUser() {
