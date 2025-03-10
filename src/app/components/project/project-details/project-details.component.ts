@@ -1,13 +1,13 @@
-import { TaskService } from './../../services/task/task.service';
-import { DateService } from './../../services/date.service';
-import { ProjectService } from './../../services/project/project.service';
+import { TaskService } from '../../../services/task/task.service';
+import { DateService } from '../../../services/date.service';
+import { ProjectService } from '../../../services/project/project.service';
 import { Component, inject, NgZone, OnInit, ViewChild } from '@angular/core';
-import { Project } from '../../models/project/project.type';
+import { Project } from '../../../models/project/project.type';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
-import { Task } from '../../models/task/task.type';
+import { Task } from '../../../models/task/task.type';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
@@ -15,15 +15,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
-import { ProjectEditingFormComponent } from '../project-editing-form/project-editing-form.component';
-import { ProjectCreationRequest } from '../../models/project/projectCreationRequest.type';
+import { ProjectCreationRequest } from '../../../models/project/projectCreationRequest.type';
 import { format } from 'date-fns';
 import { ProjectDeleteConfirmationComponent } from '../project-delete-confirmation/project-delete-confirmation.component';
-import { TaskCreationFormComponent } from '../task-creation-form/task-creation-form.component';
-import { TaskCreationRequest } from '../../models/task/taskCreationRequest.type';
-import { TaskEditingFormComponent } from '../task-editing-form/task-editing-form.component';
-import { TaskDeleteConfirmationComponent } from '../task-delete-confirmation/task-delete-confirmation.component';
+import { TaskCreationRequest } from '../../../models/task/taskCreationRequest.type';
+import { TaskDeleteConfirmationComponent } from '../../task/task-delete-confirmation/task-delete-confirmation.component';
 import { MatIconModule } from '@angular/material/icon';
+import { ProjectEditingFormComponent } from '../project-editing-form/project-editing-form.component';
+import { TaskCreationFormComponent } from '../../task/task-creation-form/task-creation-form.component';
+import { TaskEditingFormComponent } from '../../task/task-editing-form/task-editing-form.component';
 
 @Component({
   selector: 'app-project-details',

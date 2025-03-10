@@ -1,0 +1,69 @@
+<h2 mat-dialog-title>Log Time</h2>
+
+<form [formGroup]="form" (ngSubmit)="submitForm()" mat-dialog-content>
+  <!-- Start Date Picker -->
+  <mat-form-field appearance="outline">
+    <mat-label>Start Date</mat-label>
+    <input
+      matInput
+      [matDatepicker]="startPicker"
+      formControlName="start_date"
+    />
+    <mat-datepicker-toggle
+      matSuffix
+      [for]="startPicker"
+    ></mat-datepicker-toggle>
+    <mat-datepicker #startPicker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Start Time</mat-label>
+    <input matInput type="time" formControlName="start_time" />
+  </mat-form-field>
+
+  <!-- End Date Picker -->
+  <mat-form-field appearance="outline">
+    <mat-label>End Date</mat-label>
+    <input matInput [matDatepicker]="endPicker" formControlName="end_date" />
+    <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+    <mat-datepicker #endPicker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>End Time</mat-label>
+    <input matInput type="time" formControlName="end_time" />
+  </mat-form-field>
+
+  <!-- Task Autocomplete -->
+  <mat-form-field appearance="outline">
+    <mat-label>Task</mat-label>
+    <input
+      type="text"
+      matInput
+      formControlName="task"
+      [matAutocomplete]="taskAuto"
+      (keyup)="getTasks()"
+    />
+    <mat-autocomplete #taskAuto="matAutocomplete">
+      <mat-option
+        *ngFor="let task of filteredTasks"
+        [value]="task.name"
+        (click)="selectTask(task)"
+      >
+        {{ task.name }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Description</mat-label>
+    <input matInput formControlName="description" required />
+  </mat-form-field>
+
+  <div mat-dialog-actions align="end">
+    <button mat-button (click)="closeDialog()">Cancel</button>
+    <button mat-button (click)="submitForm()" color="primary" type="submit">
+      Submit
+    </button>
+  </div>
+</form>

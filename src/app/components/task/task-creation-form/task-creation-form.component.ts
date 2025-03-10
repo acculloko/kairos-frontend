@@ -1,7 +1,4 @@
-import { DateService } from './../../services/date.service';
-import { TaskService } from './../../services/task/task.service';
-import { UserService } from './../../services/user/user.service';
-import { Component, Inject, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -10,21 +7,18 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogModule,
-  MatDialogRef,
-} from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { CommonModule } from '@angular/common';
-import { ProjectService } from '../../services/project/project.service';
+import { UserService } from '../../../services/user/user.service';
+import { ProjectService } from '../../../services/project/project.service';
 
 @Component({
-  selector: 'app-task-editing-form',
+  selector: 'app-task-creation-form',
   imports: [
     MatFormFieldModule,
     ReactiveFormsModule,
@@ -37,14 +31,12 @@ import { ProjectService } from '../../services/project/project.service';
     MatAutocompleteModule,
     CommonModule,
   ],
-  templateUrl: './task-editing-form.component.html',
-  styleUrl: './task-editing-form.component.scss',
+  templateUrl: './task-creation-form.component.html',
+  styleUrl: './task-creation-form.component.scss',
 })
-export class TaskEditingFormComponent implements OnInit {
+export class TaskCreationFormComponent {
   userService = inject(UserService);
   projectService = inject(ProjectService);
-  taskService = inject(TaskService);
-  dateService = inject(DateService);
 
   form: FormGroup;
 
@@ -58,8 +50,7 @@ export class TaskEditingFormComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<TaskEditingFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { id: number }
+    private dialogRef: MatDialogRef<TaskCreationFormComponent>
   ) {
     this.form = this.fb.group({
       project: ['', Validators.required],
@@ -69,20 +60,6 @@ export class TaskEditingFormComponent implements OnInit {
       end_date: ['', Validators.required],
       status: ['', Validators.required],
       responsible_user: ['', Validators.required],
-    });
-  }
-
-  ngOnInit(): void {
-    this.taskService.getTaskById(this.data.id).subscribe((entry) => {
-      this.form.patchValue(entry);
-      this.form.patchValue({
-        start_date: this.dateService.parseDate(entry.start_date, 'dd/MM/yyyy'),
-        end_date: this.dateService.parseDate(entry.end_date, 'dd/MM/yyyy'),
-        project: entry.project.name,
-        responsible_user: entry.responsible_user.name,
-      });
-      this.selectedUserId = entry.responsible_user.id;
-      this.selectedProjectId = entry.project.id;
     });
   }
 

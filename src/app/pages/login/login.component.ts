@@ -1,3 +1,4 @@
+import { AuthService } from './../../services/auth/auth.service';
 import { LoginRequest } from './../../models/user/loginRequest.type';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -13,6 +14,7 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
   userService = inject(UserService);
+  authService = inject(AuthService);
   router = inject(Router);
 
   loginObj: LoginRequest = {
@@ -21,7 +23,6 @@ export class LoginComponent {
   };
 
   onLogin() {
-    console.log(this.loginObj);
     // removes token so that every login gets a new token
     localStorage.removeItem('Token');
     this.userService
@@ -34,10 +35,9 @@ export class LoginComponent {
         })
       )
       .subscribe((res: any) => {
-        console.log('res: ' + res);
         if (res.token) {
-          alert('Welcome ' + res.name);
           localStorage.setItem('Token', res.token);
+          alert('Welcome ' + this.authService.getUserInfo()?.name);
           this.router.navigateByUrl('dashboard');
         }
       });

@@ -40,7 +40,7 @@ export class CustomSidenavComponent {
     {
       icon: 'hourglass_empty',
       label: 'Time Logger',
-      route: 'timelog',
+      route: 'timelogger',
     },
   ]);
 }

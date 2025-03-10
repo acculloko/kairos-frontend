@@ -15,4 +15,12 @@ export class DateService {
     if (!date) return '';
     return format(new Date(date), dateFormat);
   }
+
+  formatDateTime(date: Date): string {
+    return date
+      ? `${date.toLocaleDateString('en-GB')} ${date.toLocaleTimeString(
+          'en-GB'
+        )}`
+      : '';
+  }
 }

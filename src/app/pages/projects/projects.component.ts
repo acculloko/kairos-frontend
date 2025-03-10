@@ -14,7 +14,6 @@ import { ProjectService } from '../../services/project/project.service';
 import { Project } from '../../models/project/project.type';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { ProjectCreationFormComponent } from '../../components/project-creation-form/project-creation-form.component';
 import { ProjectCreationRequest } from '../../models/project/projectCreationRequest.type';
 import { format } from 'date-fns';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -23,6 +22,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
+import { ProjectCreationFormComponent } from '../../components/project/project-creation-form/project-creation-form.component';
 
 @Component({
   selector: 'app-projects',

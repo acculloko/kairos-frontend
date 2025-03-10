@@ -10,9 +10,8 @@ import {
   MatTableModule,
 } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
-import { UserCreationFormComponent } from '../../components/user-creation-form/user-creation-form.component';
-import { UserEditingFormComponent } from '../../components/user-editing-form/user-editing-form.component';
-import { UserDeleteConfirmationComponent } from '../../components/user-delete-confirmation/user-delete-confirmation.component';
+import { UserCreationFormComponent } from '../../components/user/user-creation-form/user-creation-form.component';
+import { UserDeleteConfirmationComponent } from '../../components/user/user-delete-confirmation/user-delete-confirmation.component';
 import { DateService } from '../../services/date.service';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
@@ -21,6 +20,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { UserEditingFormComponent } from '../../components/user/user-editing-form/user-editing-form.component';
 
 @Component({
   selector: 'app-users',

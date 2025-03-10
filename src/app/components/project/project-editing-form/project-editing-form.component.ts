@@ -1,5 +1,3 @@
-import { DateService } from './../../services/date.service';
-import { ProjectService } from './../../services/project/project.service';
 import { CommonModule } from '@angular/common';
 import { Component, Inject, inject, OnInit } from '@angular/core';
 import {
@@ -20,7 +18,9 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { UserService } from '../../services/user/user.service';
+import { UserService } from '../../../services/user/user.service';
+import { ProjectService } from '../../../services/project/project.service';
+import { DateService } from '../../../services/date.service';
 
 @Component({
   selector: 'app-project-editing-form',

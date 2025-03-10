@@ -1,4 +1,3 @@
-import { UserService } from './../../services/user/user.service';
 import { Component, inject } from '@angular/core';
 import {
   FormBuilder,
@@ -15,6 +14,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { CommonModule } from '@angular/common';
+import { UserService } from '../../../services/user/user.service';
 
 @Component({
   selector: 'app-project-creation-form',

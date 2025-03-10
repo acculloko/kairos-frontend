@@ -13,12 +13,12 @@ import { ProjectService } from '../../services/project/project.service';
 import { TaskService } from '../../services/task/task.service';
 import { DateService } from '../../services/date.service';
 import { Task } from '../../models/task/task.type';
-import { TaskDeleteConfirmationComponent } from '../../components/task-delete-confirmation/task-delete-confirmation.component';
+import { TaskDeleteConfirmationComponent } from '../../components/task/task-delete-confirmation/task-delete-confirmation.component';
 import { format } from 'date-fns';
 import { TaskCreationRequest } from '../../models/task/taskCreationRequest.type';
-import { TaskEditingFormComponent } from '../../components/task-editing-form/task-editing-form.component';
-import { TaskCreationFormComponent } from '../../components/task-creation-form/task-creation-form.component';
 import { MatIconModule } from '@angular/material/icon';
+import { TaskCreationFormComponent } from '../../components/task/task-creation-form/task-creation-form.component';
+import { TaskEditingFormComponent } from '../../components/task/task-editing-form/task-editing-form.component';
 
 @Component({
   selector: 'app-tasks',
