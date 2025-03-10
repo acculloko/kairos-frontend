@@ -151,6 +151,11 @@ export class ProjectsComponent implements OnInit {
       } else if (this.selectedFilterField === 'end_date' && data.end_date) {
         fieldValue =
           this.dateService.formatDate(data.end_date, 'dd/MM/yyyy') || '';
+      } else if (
+        this.selectedFilterField === 'responsible_user.name' &&
+        data.responsible_user
+      ) {
+        fieldValue = data.responsible_user.name || '';
       } else {
         fieldValue = (data as any)[this.selectedFilterField] || '';
       }

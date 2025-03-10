@@ -10,29 +10,75 @@
 
 <h2>Tasks</h2>
 
-<table mat-table [dataSource]="taskList" class="mat-elevation-z8">
+<button mat-button color="primary" (click)="createTask()">
+  Create Child Task
+</button>
+
+<mat-form-field appearance="outline">
+  <mat-label>Filter by</mat-label>
+  <mat-select [(ngModel)]="selectedFilterField">
+    <mat-option *ngFor="let field of filterableFields" [value]="field.value">
+      {{ field.label }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field appearance="outline">
+  <mat-label>Filter</mat-label>
+  <input matInput (keyup)="onSearch($event)" />
+</mat-form-field>
+
+<table mat-table [dataSource]="taskDataSource" matSort class="mat-elevation-z8">
   <!-- Columns Definition -->
   <!-- ID -->
   <ng-container matColumnDef="id">
-    <th mat-header-cell *matHeaderCellDef>ID</th>
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      mat-sort-header
+      sortActionDescription="Sort by ID"
+    >
+      ID
+    </th>
     <td mat-cell *matCellDef="let entry">{{ entry.id }}</td>
   </ng-container>
 
   <!-- Name -->
   <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef>Name</th>
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      mat-sort-header
+      sortActionDescription="Sort by Name"
+    >
+      Name
+    </th>
     <td mat-cell *matCellDef="let entry">{{ entry.name }}</td>
   </ng-container>
 
   <!-- Responsible User -->
   <ng-container matColumnDef="responsible_user">
-    <th mat-header-cell *matHeaderCellDef>Responsible User</th>
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      mat-sort-header
+      sortActionDescription="Sort by Responsible User"
+    >
+      Responsible User
+    </th>
     <td mat-cell *matCellDef="let entry">{{ entry.responsible_user.name }}</td>
   </ng-container>
 
   <!-- Start Date -->
   <ng-container matColumnDef="start_date">
-    <th mat-header-cell *matHeaderCellDef>Start date</th>
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      mat-sort-header
+      sortActionDescription="Sort by Start Date"
+    >
+      Start date
+    </th>
     <td mat-cell *matCellDef="let entry">
       {{ entry.start_date | date : "dd/MM/yyyy" }}
     </td>
@@ -40,7 +86,14 @@
 
   <!-- End Date -->
   <ng-container matColumnDef="end_date">
-    <th mat-header-cell *matHeaderCellDef>End Date</th>
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      mat-sort-header
+      sortActionDescription="Sort by End Date"
+    >
+      End Date
+    </th>
     <td mat-cell *matCellDef="let entry">
       {{ entry.end_date | date : "dd/MM/yyyy" }}
     </td>
@@ -48,13 +101,27 @@
 
   <!-- Status -->
   <ng-container matColumnDef="status">
-    <th mat-header-cell *matHeaderCellDef>Status</th>
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      mat-sort-header
+      sortActionDescription="Sort by Status"
+    >
+      Status
+    </th>
     <td mat-cell *matCellDef="let entry">{{ entry.status }}</td>
   </ng-container>
 
   <!-- Creation Date -->
   <ng-container matColumnDef="creation_date">
-    <th mat-header-cell *matHeaderCellDef>Creation date</th>
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      mat-sort-header
+      sortActionDescription="Sort by Creation Date"
+    >
+      Creation date
+    </th>
     <td mat-cell *matCellDef="let entry">
       {{ entry.creation_date | date : "dd/MM/yyyy HH:mm:ss" }}
     </td>
@@ -76,3 +143,8 @@
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 </table>
+
+<mat-paginator
+  [pageSizeOptions]="[5, 10, 20]"
+  showFirstLastButtons
+></mat-paginator>
