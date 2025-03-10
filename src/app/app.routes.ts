@@ -7,6 +7,7 @@ import { ProjectsComponent } from './pages/projects/projects.component';
 import { ProjectDetailsComponent } from './components/project/project-details/project-details.component';
 import { TasksComponent } from './pages/tasks/tasks.component';
 import { TimeloggerComponent } from './pages/timelogger/timelogger.component';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -21,6 +22,7 @@ export const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
+    canActivate: [AuthGuard],
     children: [
       {
         path: 'dashboard',
