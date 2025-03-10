@@ -20,6 +20,7 @@ import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-users',
@@ -33,6 +34,7 @@ import { FormsModule } from '@angular/forms';
     MatInputModule,
     MatSelectModule,
     FormsModule,
+    MatIconModule,
   ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
@@ -99,6 +101,7 @@ export class UsersComponent implements OnInit {
         this.userDataSource.paginator = this.paginator;
         this.userDataSource.sort = this.sort;
         this.setupFilterPredicate();
+        this.setupSorting();
       },
     });
   }
@@ -131,6 +134,29 @@ export class UsersComponent implements OnInit {
       }
 
       return fieldValue.toLowerCase().includes(filter);
+    };
+  }
+
+  setupSorting() {
+    this.userDataSource.sortingDataAccessor = (
+      item: User,
+      property: string
+    ): string | number => {
+      if (property === 'creation_date' || property === 'last_login') {
+        return item[property as keyof User]
+          ? new Date(item[property as keyof User] as string).getTime()
+          : 0;
+      }
+
+      const value = item[property as keyof User];
+
+      if (typeof value === 'string') {
+        return value.toLowerCase(); // Normalize all strings to lowercase for sorting
+      }
+
+      return typeof value === 'number' || typeof value === 'string'
+        ? value
+        : '';
     };
   }
 

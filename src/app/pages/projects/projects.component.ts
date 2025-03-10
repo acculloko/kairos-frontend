@@ -191,6 +191,10 @@ export class ProjectsComponent implements OnInit {
 
       const value = item[property as keyof Project];
 
+      if (typeof value === 'string') {
+        return value.toLowerCase(); // Normalize all strings to lowercase for sorting
+      }
+
       return typeof value === 'number' || typeof value === 'string'
         ? value
         : '';

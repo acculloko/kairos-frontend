@@ -56,6 +56,26 @@
     <td mat-cell *matCellDef="let entry">{{ entry.name }}</td>
   </ng-container>
 
+  <!-- Description -->
+  <ng-container matColumnDef="description">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      mat-sort-header
+      sortActionDescription="Sort by Name"
+    >
+      Description
+    </th>
+    <td
+      mat-cell
+      class="description"
+      *matCellDef="let entry"
+      [title]="entry.description"
+    >
+      {{ entry.description }}
+    </td>
+  </ng-container>
+
   <!-- Responsible User -->
   <ng-container matColumnDef="responsible_user">
     <th
@@ -131,11 +151,11 @@
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell *matCellDef="let entry">
-      <button mat-button color="primary" (click)="editTask(entry.id)">
-        Edit
+      <button mat-icon-button color="primary" (click)="editTask(entry.id)">
+        <mat-icon color="primary">edit</mat-icon>
       </button>
-      <button mat-button color="warn" (click)="deleteTask(entry.id)">
-        Delete
+      <button mat-icon-button color="warn" (click)="deleteTask(entry.id)">
+        <mat-icon color="warn">delete</mat-icon>
       </button>
     </td>
   </ng-container>

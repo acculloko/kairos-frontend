@@ -23,6 +23,7 @@ import { TaskCreationFormComponent } from '../task-creation-form/task-creation-f
 import { TaskCreationRequest } from '../../models/task/taskCreationRequest.type';
 import { TaskEditingFormComponent } from '../task-editing-form/task-editing-form.component';
 import { TaskDeleteConfirmationComponent } from '../task-delete-confirmation/task-delete-confirmation.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-project-details',
@@ -36,6 +37,7 @@ import { TaskDeleteConfirmationComponent } from '../task-delete-confirmation/tas
     MatInputModule,
     MatSelectModule,
     FormsModule,
+    MatIconModule,
   ],
   templateUrl: './project-details.component.html',
   styleUrl: './project-details.component.scss',
@@ -58,6 +60,7 @@ export class ProjectDetailsComponent implements OnInit {
   displayedColumns: string[] = [
     'id',
     'name',
+    'description',
     'responsible_user',
     'start_date',
     'end_date',
@@ -70,6 +73,7 @@ export class ProjectDetailsComponent implements OnInit {
   filterableFields = [
     { label: 'Id', value: 'id' },
     { label: 'Name', value: 'name' },
+    { label: 'Description', value: 'description' },
     { label: 'Responsible User', value: 'responsible_user.name' },
     { label: 'Start Date', value: 'start_date' },
     { label: 'End Date', value: 'end_date' },
@@ -298,6 +302,10 @@ export class ProjectDetailsComponent implements OnInit {
       }
 
       const value = item[property as keyof Task];
+
+      if (typeof value === 'string') {
+        return value.toLowerCase(); // Normalize all strings to lowercase for sorting
+      }
 
       return typeof value === 'number' || typeof value === 'string'
         ? value
