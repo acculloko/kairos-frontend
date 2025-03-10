@@ -5,6 +5,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { UsersComponent } from './pages/users/users.component';
 import { ProjectsComponent } from './pages/projects/projects.component';
 import { ProjectDetailsComponent } from './components/project-details/project-details.component';
+import { TasksComponent } from './pages/tasks/tasks.component';
 
 export const routes: Routes = [
   {
@@ -35,6 +36,10 @@ export const routes: Routes = [
       {
         path: 'projects/:id',
         component: ProjectDetailsComponent,
+      },
+      {
+        path: 'tasks',
+        component: TasksComponent,
       },
     ],
   },

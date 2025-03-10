@@ -81,36 +81,6 @@ export class ProjectsComponent implements OnInit {
     this.getAllProjects();
   }
 
-  // getAllProjects() {
-  //   this.projectService.getProjects().subscribe((res: any) => {
-  //     this.projectList = res.map((project: Project) => ({
-  //       ...project,
-  //       start_date: this.dateService.parseDate(
-  //         project.start_date,
-  //         'dd/MM/yyyy'
-  //       ),
-  //       end_date: this.dateService.parseDate(project.end_date, 'dd/MM/yyyy'),
-  //       creation_date: this.dateService.parseDate(
-  //         project.creation_date,
-  //         'dd/MM/yyyy HH:mm:ss'
-  //       ),
-  //       responsible_user: {
-  //         ...project.responsible_user,
-  //         creation_date: this.dateService.parseDate(
-  //           project.responsible_user.creation_date,
-  //           'dd/MM/yyyy HH:mm:ss'
-  //         ),
-  //         last_login: project.responsible_user.last_login
-  //           ? this.dateService.parseDate(
-  //               project.responsible_user.last_login,
-  //               'dd/MM/yyyy HH:mm:ss'
-  //             )
-  //           : null,
-  //       },
-  //     }));
-  //   });
-  // }
-
   getAllProjects() {
     this.projectService.getProjects().subscribe({
       next: (response: any) => {

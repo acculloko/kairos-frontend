@@ -1,8 +1,8 @@
+import { ProjectCreationRequest } from './../../models/project/projectCreationRequest.type';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Project } from '../../models/project/project.type';
-import { ProjectCreationRequest } from '../../models/project/projectCreationRequest.type';
 
 @Injectable({
   providedIn: 'root',
@@ -24,5 +24,16 @@ export class ProjectService {
       `${this.API_URL}/project`,
       projectCreationRequest
     );
+  }
+
+  editProject(projectCreationRequest: ProjectCreationRequest, id: number) {
+    return this.http.put<Project>(
+      `${this.API_URL}/project/${id}`,
+      projectCreationRequest
+    );
+  }
+
+  deleteProject(id: number) {
+    return this.http.delete<Project>(`${this.API_URL}/project/${id}`);
   }
 }
