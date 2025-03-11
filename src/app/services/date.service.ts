@@ -23,4 +23,13 @@ export class DateService {
         )}`
       : '';
   }
+
+  formatHoursToReadableString(totalHours: number): string {
+    const hours = Math.floor(totalHours); // Get whole hours
+    const minutes = Math.round((totalHours - hours) * 60); // Convert decimal part to minutes
+    if (minutes === 0) {
+      return `${hours}h`;
+    }
+    return `${hours}h, ${minutes}m`;
+  }
 }

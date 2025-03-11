@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Log Time</h2>
+<h2 mat-dialog-title>Edit Log</h2>
 
 <form [formGroup]="form" (ngSubmit)="submitForm()" mat-dialog-content>
   <!-- Start Date Picker -->
@@ -67,10 +67,3 @@
     </button>
   </div>
 </form>
-
-<!-- Error Message -->
-<div *ngIf="form.hasError('invalidDateRange')">
-  <mat-error
-    >End date and time must be after the start date and time.</mat-error
-  >
-</div>

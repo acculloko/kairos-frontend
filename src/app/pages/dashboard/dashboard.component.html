@@ -1,1 +1,456 @@
-<h1>Dashboard</h1>
+<div class="grid-container">
+  <h1>Dashboard</h1>
+  <mat-grid-list [cols]="cols" rowHeight="200px">
+    <!-- N Hours -->
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title>
+            N Hours
+            <button
+              mat-icon-button
+              class="more-button"
+              [matMenuTriggerFor]="menu"
+              aria-label="Toggle menu"
+            >
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" xPosition="before">
+              <button mat-menu-item>Expand</button>
+              <button mat-menu-item>Remove</button>
+            </mat-menu>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="dashboard-card-content">
+          <div>
+            <h1>{{ this.dateService.formatHoursToReadableString(nHours) }}</h1>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+
+    <!-- Total Hours (ADMIN) -->
+    @if (this.role === 'ADMIN') {
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title>
+            Total Hours
+            <button
+              mat-icon-button
+              class="more-button"
+              [matMenuTriggerFor]="menu"
+              aria-label="Toggle menu"
+            >
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" xPosition="before">
+              <button mat-menu-item>Expand</button>
+              <button mat-menu-item>Remove</button>
+            </mat-menu>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="dashboard-card-content">
+          <div>
+            <h1>
+              {{ this.dateService.formatHoursToReadableString(totalHours) }}
+            </h1>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+    }
+
+    <!-- N Tasks -->
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title>
+            My Active Tasks
+            <button
+              mat-icon-button
+              class="more-button"
+              [matMenuTriggerFor]="menu"
+              aria-label="Toggle menu"
+            >
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" xPosition="before">
+              <button mat-menu-item>Expand</button>
+              <button mat-menu-item>Remove</button>
+            </mat-menu>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="dashboard-card-content">
+          <div>
+            <h1>{{ this.nTasks }}</h1>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+
+    <!-- Total Tasks (ADMIN) -->
+    @if (this.role === 'ADMIN') {
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title>
+            Total Active Tasks
+            <button
+              mat-icon-button
+              class="more-button"
+              [matMenuTriggerFor]="menu"
+              aria-label="Toggle menu"
+            >
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" xPosition="before">
+              <button mat-menu-item>Expand</button>
+              <button mat-menu-item>Remove</button>
+            </mat-menu>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="dashboard-card-content">
+          <div>
+            <h1>{{ this.totalTasks }}</h1>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+    }
+
+    <!-- Hours / User / Period -->
+    <mat-grid-tile [colspan]="2" [rowspan]="2">
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title>
+            Hours / User / Period
+            <button
+              mat-icon-button
+              class="more-button"
+              [matMenuTriggerFor]="menu"
+              aria-label="Toggle menu"
+            >
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" xPosition="before">
+              <button mat-menu-item>Expand</button>
+              <button mat-menu-item>Remove</button>
+            </mat-menu>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="dashboard-card-content">
+          <div>Card Content Here</div>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+
+    <!-- Project Report -->
+    <mat-grid-tile [colspan]="2" [rowspan]="2">
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title>
+            Project Report
+            <button
+              mat-icon-button
+              class="more-button"
+              [matMenuTriggerFor]="menu"
+              aria-label="Toggle menu"
+            >
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" xPosition="before">
+              <button mat-menu-item>Expand</button>
+              <button mat-menu-item>Remove</button>
+            </mat-menu>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="dashboard-card-content">
+          <div>Card Content Here</div>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+
+    <!-- Overdue Tasks (ADMIN) -->
+    <mat-grid-tile [colspan]="2" [rowspan]="2">
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title>
+            Overdue Tasks
+            <button
+              mat-icon-button
+              class="more-button"
+              [matMenuTriggerFor]="menu"
+              aria-label="Toggle menu"
+            >
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" xPosition="before">
+              <button mat-menu-item>Expand</button>
+              <button mat-menu-item>Remove</button>
+            </mat-menu>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="dashboard-card-content">
+          <div>
+            <table
+              mat-table
+              [dataSource]="overdueTaskDataSource"
+              class="dashboard-table-background"
+            >
+              <!-- Columns Definition -->
+              <!-- ID -->
+              <ng-container matColumnDef="id">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  mat-sort-header
+                  sortActionDescription="Sort by ID"
+                >
+                  ID
+                </th>
+                <td mat-cell *matCellDef="let entry">{{ entry.id }}</td>
+              </ng-container>
+
+              <!-- Name -->
+              <ng-container matColumnDef="name">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  mat-sort-header
+                  sortActionDescription="Sort by Name"
+                >
+                  Name
+                </th>
+                <td mat-cell *matCellDef="let entry">{{ entry.name }}</td>
+              </ng-container>
+
+              <!-- Description -->
+              <ng-container matColumnDef="description">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  mat-sort-header
+                  sortActionDescription="Sort by Name"
+                >
+                  Description
+                </th>
+                <td
+                  mat-cell
+                  class="description"
+                  *matCellDef="let entry"
+                  [title]="entry.description"
+                >
+                  {{ entry.description }}
+                </td>
+              </ng-container>
+
+              <!-- Project -->
+              <ng-container matColumnDef="project">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  mat-sort-header
+                  sortActionDescription="Sort by Project"
+                >
+                  Project
+                </th>
+                <td mat-cell *matCellDef="let entry">
+                  {{ entry.project.name }}
+                </td>
+              </ng-container>
+
+              <!-- Responsible User -->
+              <ng-container matColumnDef="responsible_user">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  mat-sort-header
+                  sortActionDescription="Sort by Responsible User"
+                >
+                  Responsible User
+                </th>
+                <td mat-cell *matCellDef="let entry">
+                  {{ entry.responsible_user.name }}
+                </td>
+              </ng-container>
+
+              <!-- End Date -->
+              <ng-container matColumnDef="end_date">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  mat-sort-header
+                  sortActionDescription="Sort by End Date"
+                >
+                  End Date
+                </th>
+                <td mat-cell *matCellDef="let entry">
+                  {{ entry.end_date | date : "dd/MM/yyyy" }}
+                </td>
+              </ng-container>
+
+              <tr
+                mat-header-row
+                *matHeaderRowDef="overdueDisplayedColumns"
+              ></tr>
+              <tr
+                mat-row
+                *matRowDef="let row; columns: overdueDisplayedColumns"
+              ></tr>
+            </table>
+
+            <mat-paginator
+              #overduePaginator
+              [pageSize]="4"
+              showFirstLastButtons
+              class="dashboard-table-background"
+            ></mat-paginator>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+
+    <!-- Upcoming Tasks -->
+    <mat-grid-tile [colspan]="2" [rowspan]="2">
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title>
+            Upcoming Tasks
+            <button
+              mat-icon-button
+              class="more-button"
+              [matMenuTriggerFor]="menu"
+              aria-label="Toggle menu"
+            >
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" xPosition="before">
+              <button mat-menu-item>Expand</button>
+              <button mat-menu-item>Remove</button>
+            </mat-menu>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="dashboard-card-content">
+          <div>
+            <table
+              mat-table
+              [dataSource]="upcomingTaskDataSource"
+              class="dashboard-table-background"
+            >
+              <!-- Columns Definition -->
+              <!-- ID -->
+              <ng-container matColumnDef="id">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  mat-sort-header
+                  sortActionDescription="Sort by ID"
+                >
+                  ID
+                </th>
+                <td mat-cell *matCellDef="let entry">{{ entry.id }}</td>
+              </ng-container>
+
+              <!-- Name -->
+              <ng-container matColumnDef="name">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  mat-sort-header
+                  sortActionDescription="Sort by Name"
+                >
+                  Name
+                </th>
+                <td mat-cell *matCellDef="let entry">{{ entry.name }}</td>
+              </ng-container>
+
+              <!-- Description -->
+              <ng-container matColumnDef="description">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  mat-sort-header
+                  sortActionDescription="Sort by Name"
+                >
+                  Description
+                </th>
+                <td
+                  mat-cell
+                  class="description"
+                  *matCellDef="let entry"
+                  [title]="entry.description"
+                >
+                  {{ entry.description }}
+                </td>
+              </ng-container>
+
+              <!-- Project -->
+              <ng-container matColumnDef="project">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  mat-sort-header
+                  sortActionDescription="Sort by Project"
+                >
+                  Project
+                </th>
+                <td mat-cell *matCellDef="let entry">
+                  {{ entry.project.name }}
+                </td>
+              </ng-container>
+
+              <!-- Responsible User -->
+              <ng-container matColumnDef="responsible_user">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  mat-sort-header
+                  sortActionDescription="Sort by Responsible User"
+                >
+                  Responsible User
+                </th>
+                <td mat-cell *matCellDef="let entry">
+                  {{ entry.responsible_user.name }}
+                </td>
+              </ng-container>
+
+              <!-- End Date -->
+              <ng-container matColumnDef="end_date">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  mat-sort-header
+                  sortActionDescription="Sort by End Date"
+                >
+                  End Date
+                </th>
+                <td mat-cell *matCellDef="let entry">
+                  {{ entry.end_date | date : "dd/MM/yyyy" }}
+                </td>
+              </ng-container>
+
+              <tr
+                mat-header-row
+                *matHeaderRowDef="upcomingDisplayedColumns"
+              ></tr>
+              <tr
+                mat-row
+                *matRowDef="let row; columns: upcomingDisplayedColumns"
+              ></tr>
+            </table>
+
+            <mat-paginator
+              #upcomingPaginator
+              [pageSize]="4"
+              showFirstLastButtons
+              class="dashboard-table-background"
+            ></mat-paginator>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
+
+<!-- <app-dashboard-test></app-dashboard-test> -->

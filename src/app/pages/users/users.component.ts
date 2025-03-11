@@ -21,6 +21,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { UserEditingFormComponent } from '../../components/user/user-editing-form/user-editing-form.component';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-users',
@@ -43,7 +44,10 @@ export class UsersComponent implements OnInit {
   dialog = inject(MatDialog);
   userService = inject(UserService);
   dateService = inject(DateService);
+  authService = inject(AuthService);
   ngZone = inject(NgZone);
+
+  role: string = '';
 
   // MatTable
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -58,6 +62,8 @@ export class UsersComponent implements OnInit {
     'role',
     'actions',
   ];
+  // Total length of the displayedColumns array
+  displayTotalLength: number = 7;
 
   selectedFilterField: string = 'name';
   filterableFields = [
@@ -74,6 +80,15 @@ export class UsersComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllUsers();
+    this.role = this.authService.getUserInfo()?.role ?? '';
+
+    // Logic for displaying or not the edit and delete buttons.
+    if (
+      this.role != 'ADMIN' &&
+      this.displayedColumns.length >= this.displayTotalLength
+    ) {
+      this.displayedColumns.pop();
+    }
   }
 
   getAllUsers() {

@@ -19,6 +19,16 @@ export class TimelogService {
     return this.http.get<Timelog>(`${this.API_URL}/timelog/${id}`);
   }
 
+  getTotalHours() {
+    return this.http.get<number>(`${this.API_URL}/timelog/total-logged-hours`);
+  }
+
+  getTotalHoursByUser(id: string | number) {
+    return this.http.get<number>(
+      `${this.API_URL}/timelog/total-logged-hours/user/${id}`
+    );
+  }
+
   logTime(timelogCreationRequest: TimelogCreationRequest) {
     return this.http.post<Timelog>(
       `${this.API_URL}/timelog`,

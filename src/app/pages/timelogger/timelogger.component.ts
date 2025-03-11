@@ -21,6 +21,8 @@ import { Timelog } from '../../models/timelog/timelog.type';
 import { TimelogService } from '../../services/timelog/timelog.service';
 import { TimelogCreationFormComponent } from '../../components/timelogger/timelog-creation-form/timelog-creation-form.component';
 import { TimelogCreationRequest } from '../../models/timelog/timelogCreationRequest.type';
+import { TimelogEditingFormComponent } from '../../components/timelogger/timelog-editing-form/timelog-editing-form.component';
+import { TimelogDeleteConfirmationComponent } from '../../components/timelogger/timelog-delete-confirmation/timelog-delete-confirmation.component';
 
 @Component({
   selector: 'app-timelogger',
@@ -157,14 +159,13 @@ export class TimeloggerComponent implements OnInit {
         this.timelogDataSource = new MatTableDataSource<Timelog>(
           this.timelogList
         );
-        console.log(this.timelogDataSource);
+        // console.log(this.timelogDataSource);
       },
       error: (err) => {
         console.error(err);
         throw err;
       },
       complete: () => {
-        console.log('complete');
         this.timelogDataSource.paginator = this.paginator;
         this.timelogDataSource.sort = this.sort;
         this.setupFilterPredicate();
@@ -249,7 +250,7 @@ export class TimeloggerComponent implements OnInit {
   logTime() {
     const dialogRef = this.dialog.open(TimelogCreationFormComponent, {
       width: '600px',
-      data: { id: this.authService.getUserInfo()?.id },
+      data: { userId: this.authService.getUserInfo()?.id },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -283,10 +284,66 @@ export class TimeloggerComponent implements OnInit {
   }
 
   editLog(id: number) {
-    return null;
+    const dialogRef = this.dialog.open(TimelogEditingFormComponent, {
+      width: '600px',
+      data: { id, userId: this.authService.getUserInfo()?.id },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        const formattedResult: TimelogCreationRequest = {
+          description: result.description,
+          start_date: format(result.start_date, 'dd/MM/yyyy HH:mm:ss'),
+          end_date: format(result.end_date, 'dd/MM/yyyy HH:mm:ss'),
+          task_id: result.task,
+          user_id: result.user,
+        };
+
+        this.timelogService.editLog(formattedResult, id).subscribe({
+          next: (response) => {
+            console.log('Time logged successfully:', response);
+            // Forces component to reload in order to show changes in the list.
+            this.ngZone.run(() => {
+              this.ngOnInit();
+            });
+          },
+          error: (error) => {
+            console.error('Error creating timelog:', error);
+            // Forces component to reload in order to show changes in the list.
+            this.ngZone.run(() => {
+              this.ngOnInit();
+            });
+          },
+        });
+      }
+    });
   }
 
   deleteLog(id: number) {
-    return null;
+    const dialogRef = this.dialog.open(TimelogDeleteConfirmationComponent, {
+      width: '600px',
+      data: { id, userId: this.authService.getUserInfo()?.id },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.timelogService.deleteLog(id).subscribe({
+          next: (response) => {
+            console.log('timelog deleted successfully:', response);
+            // Forces component to reload in order to show changes in the list.
+            this.ngZone.run(() => {
+              this.ngOnInit();
+            });
+          },
+          error: (error) => {
+            console.error('error deleting timelog:', error);
+            // Forces component to reload in order to show changes in the list.
+            this.ngZone.run(() => {
+              this.ngOnInit();
+            });
+          },
+        });
+      }
+    });
   }
 }

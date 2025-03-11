@@ -1,7 +1,6 @@
 import { AuthService } from './../../../services/auth/auth.service';
-import { Component, Inject, inject } from '@angular/core';
+import { Component, Inject, inject, OnInit } from '@angular/core';
 import {
-  AbstractControl,
   FormBuilder,
   FormGroup,
   FormsModule,
@@ -24,9 +23,10 @@ import { UserService } from '../../../services/user/user.service';
 import { ProjectService } from '../../../services/project/project.service';
 import { TaskService } from '../../../services/task/task.service';
 import { DateService } from '../../../services/date.service';
+import { TimelogService } from '../../../services/timelog/timelog.service';
 
 @Component({
-  selector: 'app-timelog-creation-form',
+  selector: 'app-timelog-editing-form',
   imports: [
     MatFormFieldModule,
     ReactiveFormsModule,
@@ -39,20 +39,23 @@ import { DateService } from '../../../services/date.service';
     MatAutocompleteModule,
     CommonModule,
   ],
-  templateUrl: './timelog-creation-form.component.html',
-  styleUrl: './timelog-creation-form.component.scss',
+  templateUrl: './timelog-editing-form.component.html',
+  styleUrl: './timelog-editing-form.component.scss',
 })
-export class TimelogCreationFormComponent {
+export class TimelogEditingFormComponent implements OnInit {
   userService = inject(UserService);
   taskService = inject(TaskService);
   authService = inject(AuthService);
   dateService = inject(DateService);
+  timelogService = inject(TimelogService);
 
   form: FormGroup;
 
   tasks: any[] = [];
   filteredTasks: any[] = [];
   selectedTaskId: number | null = null;
+
+  selectedUserId: number | null = null;
 
   startDate!: Date;
   startTime!: string;
@@ -61,8 +64,8 @@ export class TimelogCreationFormComponent {
 
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<TimelogCreationFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { userId: number }
+    private dialogRef: MatDialogRef<TimelogEditingFormComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { id: number }
   ) {
     this.form = this.fb.group({
       description: ['', Validators.required],
@@ -74,17 +77,34 @@ export class TimelogCreationFormComponent {
     });
   }
 
+  ngOnInit(): void {
+    this.timelogService.getLogById(this.data.id).subscribe((entry) => {
+      this.form.patchValue(entry);
+      this.form.patchValue({
+        task: entry.task.name,
+      });
+      this.setInitialDateTimeValues({
+        start: entry.start_date,
+        end: entry.end_date,
+      });
+      this.selectedUserId = entry.user.id;
+      this.selectedTaskId = entry.task.id;
+    });
+  }
+
   getTasks() {
     const query = this.form.get('task')?.value;
-    if (query.length > 1) {
-      this.taskService.getTasksByUserId(this.data.userId).subscribe((tasks) => {
-        this.tasks = tasks;
-        console.log('tasks:', tasks);
-        this.filteredTasks = this.tasks.filter((task) =>
-          task.name.toLowerCase().includes(query.toLowerCase())
-        );
-        console.log('filtered tasks: ', this.filteredTasks);
-      });
+    if (query.length > 1 && this.selectedUserId) {
+      this.taskService
+        .getTasksByUserId(this.selectedUserId)
+        .subscribe((tasks) => {
+          this.tasks = tasks;
+          console.log('tasks:', tasks);
+          this.filteredTasks = this.tasks.filter((task) =>
+            task.name.toLowerCase().includes(query.toLowerCase())
+          );
+          console.log('filtered tasks: ', this.filteredTasks);
+        });
     }
   }
 
@@ -108,31 +128,36 @@ export class TimelogCreationFormComponent {
     return combinedDateTime;
   }
 
-  dateTimeValidator(group: AbstractControl) {
-    const startDate = group.get('startDate')?.value;
-    const startTime = group.get('startTime')?.value;
-    const endDate = group.get('endDate')?.value;
-    const endTime = group.get('endTime')?.value;
+  setInitialDateTimeValues(data: { start: string; end: string }) {
+    // Convert datetime strings to Date objects
+    const startDateTime = new Date(data.start);
+    const endDateTime = new Date(data.end);
 
-    if (!startDate || !startTime || !endDate || !endTime) return null; // Skip validation if fields are empty
+    // Extract only the date part
+    const startDate = startDateTime.toISOString().split('T')[0]; // YYYY-MM-DD
+    const endDate = endDateTime.toISOString().split('T')[0]; // YYYY-MM-DD
 
-    // Convert to JavaScript Date objects for comparison
-    const start = new Date(`${startDate}T${startTime}`);
-    const end = new Date(`${endDate}T${endTime}`);
+    // Extract only the time part in HH:mm format
+    const startTime = startDateTime.toTimeString().slice(0, 5); // HH:mm
+    const endTime = endDateTime.toTimeString().slice(0, 5); // HH:mm
 
-    return start < end ? null : { invalidDateRange: true }; // Return error if start >= end
+    // Set form values
+    this.form.patchValue({
+      start_date: startDate,
+      start_time: startTime,
+      end_date: endDate,
+      end_time: endTime,
+    });
   }
 
   submitForm() {
     if (this.form.valid && this.selectedTaskId) {
-      this.form.value.user = this.authService.getUserInfo()?.id;
+      this.form.value.user = this.selectedUserId;
       this.form.value.task = this.selectedTaskId;
       this.form.value.start_date = this.combineDateTime('start');
       this.form.value.end_date = this.combineDateTime('end');
       console.log('Timelog Form Values:', this.form.value);
       this.dialogRef.close(this.form.value);
-    } else {
-      console.log('Form is invalid');
     }
   }
 

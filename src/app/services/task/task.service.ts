@@ -23,6 +23,28 @@ export class TaskService {
     return this.http.get<Array<Task>>(`${this.API_URL}/task/project/${id}`);
   }
 
+  getTasksByUserId(id: number) {
+    return this.http.get<Array<Task>>(`${this.API_URL}/task/user/${id}`);
+  }
+
+  getOverdueTasks() {
+    return this.http.get<Array<Task>>(`${this.API_URL}/task/overdue`);
+  }
+
+  getUpcomingTasks(id: number | string) {
+    return this.http.get<Array<Task>>(`${this.API_URL}/task/active/${id}`);
+  }
+
+  getTotalActiveTasks() {
+    return this.http.get<number>(`${this.API_URL}/task/active/total`);
+  }
+
+  getTotalActiveTasksByUser(id: string) {
+    return this.http.get<number>(
+      `${this.API_URL}/task/active/total/user/${id}`
+    );
+  }
+
   createTask(taskCreationRequest: TaskCreationRequest) {
     return this.http.post<Task>(`${this.API_URL}/task`, taskCreationRequest);
   }

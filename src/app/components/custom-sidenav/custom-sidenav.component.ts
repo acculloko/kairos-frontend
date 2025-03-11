@@ -1,7 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth/auth.service';
 
 export type MenuItem = {
   icon: string;
@@ -16,6 +17,11 @@ export type MenuItem = {
   styleUrl: './custom-sidenav.component.scss',
 })
 export class CustomSidenavComponent {
+  authService = inject(AuthService);
+
+  name: string = this.authService.getUserInfo()?.name ?? '';
+  role: string = this.authService.getUserInfo()?.role ?? '';
+
   menuItems = signal<MenuItem[]>([
     {
       icon: 'speed',
