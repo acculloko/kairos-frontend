@@ -29,6 +29,16 @@ export class TimelogService {
     );
   }
 
+  getTotalHoursByUserOverPeriod(
+    id: string | number,
+    startDate: string | Date,
+    endDate: string | Date
+  ) {
+    return this.http.get<number>(
+      `${this.API_URL}/timelog/period-logged-hours?userId=${id}&startDate=${startDate}&endDate=${endDate}`
+    );
+  }
+
   logTime(timelogCreationRequest: TimelogCreationRequest) {
     return this.http.post<Timelog>(
       `${this.API_URL}/timelog`,

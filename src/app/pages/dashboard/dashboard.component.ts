@@ -2,7 +2,6 @@ import { TaskService } from './../../services/task/task.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AuthService } from './../../services/auth/auth.service';
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
-import { DashboardTestComponent } from '../../components/dashboard/dashboard-test/dashboard-test.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
@@ -16,11 +15,11 @@ import { Task } from '../../models/task/task.type';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { CommonModule } from '@angular/common';
+import { UserHoursComponent } from '../../components/dashboard/user-hours/user-hours.component';
 
 @Component({
   selector: 'app-dashboard',
   imports: [
-    DashboardTestComponent,
     MatGridListModule,
     MatMenuModule,
     MatIconModule,
@@ -29,6 +28,7 @@ import { CommonModule } from '@angular/common';
     MatTableModule,
     CommonModule,
     MatPaginatorModule,
+    UserHoursComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
@@ -77,7 +77,7 @@ export class DashboardComponent implements OnInit {
     'id',
     'name',
     'project',
-    'responsible_user',
+    'status',
     'end_date',
   ];
 
