@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
@@ -16,7 +16,7 @@ export type MenuItem = {
   templateUrl: './custom-sidenav.component.html',
   styleUrl: './custom-sidenav.component.scss',
 })
-export class CustomSidenavComponent {
+export class CustomSidenavComponent implements OnInit {
   authService = inject(AuthService);
 
   name: string = this.authService.getUserInfo()?.name ?? '';
@@ -49,4 +49,31 @@ export class CustomSidenavComponent {
       route: 'timelogger',
     },
   ]);
+
+  ngOnInit(): void {
+    if (this.role != 'ADMIN') {
+      this.menuItems = signal<MenuItem[]>([
+        {
+          icon: 'speed',
+          label: 'Dashboard',
+          route: 'dashboard',
+        },
+        {
+          icon: 'description',
+          label: 'Projects',
+          route: 'projects',
+        },
+        {
+          icon: 'task_alt',
+          label: 'Tasks',
+          route: 'tasks',
+        },
+        {
+          icon: 'hourglass_empty',
+          label: 'Time Logger',
+          route: 'timelogger',
+        },
+      ]);
+    }
+  }
 }

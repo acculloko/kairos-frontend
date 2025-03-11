@@ -8,6 +8,7 @@ import { ProjectDetailsComponent } from './components/project/project-details/pr
 import { TasksComponent } from './pages/tasks/tasks.component';
 import { TimeloggerComponent } from './pages/timelogger/timelogger.component';
 import { AuthGuard } from './guards/auth.guard';
+import { AdminGuard } from './guards/admin.guard';
 
 export const routes: Routes = [
   {
@@ -31,6 +32,7 @@ export const routes: Routes = [
       {
         path: 'users',
         component: UsersComponent,
+        canActivate: [AuthGuard, AdminGuard],
       },
       {
         path: 'projects',
