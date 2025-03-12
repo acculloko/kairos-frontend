@@ -1,0 +1,36 @@
+<div class="outer-div">
+  <div class="left-div">
+    <form [formGroup]="form" class="form">
+      <mat-form-field appearance="outline">
+        <mat-label>Project</mat-label>
+        <input
+          type="text"
+          matInput
+          formControlName="project"
+          [matAutocomplete]="userAuto"
+          (keyup)="getProjects()"
+        />
+        <mat-autocomplete #userAuto="matAutocomplete">
+          <mat-option
+            *ngFor="let project of filteredProjects"
+            [value]="project.name"
+            (onSelectionChange)="selectProject(project)"
+          >
+            {{ project.name }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </form>
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Total Active Projects:</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <h1>{{ totalProjects }}</h1>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="graph-div">
+    <canvas #myChart></canvas>
+  </div>
+</div>

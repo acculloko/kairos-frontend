@@ -38,6 +38,6 @@ export class DateService {
     if (minutes === 0) {
       return `${hours}h`;
     }
-    return `${hours}h, ${minutes}m`;
+    return `${hours}h ${minutes}m`;
   }
 }

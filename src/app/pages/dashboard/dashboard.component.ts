@@ -16,6 +16,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { CommonModule } from '@angular/common';
 import { UserHoursComponent } from '../../components/dashboard/user-hours/user-hours.component';
+import { ActiveProjectsComponent } from '../../components/dashboard/active-projects/active-projects.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -29,6 +30,7 @@ import { UserHoursComponent } from '../../components/dashboard/user-hours/user-h
     CommonModule,
     MatPaginatorModule,
     UserHoursComponent,
+    ActiveProjectsComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',

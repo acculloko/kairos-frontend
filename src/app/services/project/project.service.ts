@@ -19,6 +19,10 @@ export class ProjectService {
     return this.http.get<Project>(`${this.API_URL}/project/${id}`);
   }
 
+  getActiveProjects() {
+    return this.http.get<Array<Project>>(`${this.API_URL}/project/active`);
+  }
+
   createProject(projectCreationRequest: ProjectCreationRequest) {
     return this.http.post<Project>(
       `${this.API_URL}/project`,

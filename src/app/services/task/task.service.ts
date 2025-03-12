@@ -45,6 +45,10 @@ export class TaskService {
     );
   }
 
+  getTaskStatusCountByProjectId(id: number | string) {
+    return this.http.get<any>(`${this.API_URL}/task/count-by-status/${id}`);
+  }
+
   createTask(taskCreationRequest: TaskCreationRequest) {
     return this.http.post<Task>(`${this.API_URL}/task`, taskCreationRequest);
   }

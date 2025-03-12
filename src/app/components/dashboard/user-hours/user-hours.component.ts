@@ -4,7 +4,6 @@ import { MatInputModule } from '@angular/material/input';
 import { Component, inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
-  FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
@@ -14,17 +13,12 @@ import {
   MatDatepickerInputEvent,
   MatDatepickerModule,
 } from '@angular/material/datepicker';
-import { Observable, startWith, map } from 'rxjs';
 import { AuthService } from '../../../services/auth/auth.service';
 import { UserService } from '../../../services/user/user.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import {
-  MatAutocompleteModule,
-  MatAutocompleteSelectedEvent,
-} from '@angular/material/autocomplete';
-import { AsyncPipe, CommonModule } from '@angular/common';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import { User } from '../../../models/user/user.type';
 
 @Component({
   selector: 'app-user-hours',
@@ -74,7 +68,7 @@ export class UserHoursComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.selectedUserId = this.authService.getUserInfo()?.id ?? '';
     this.selectedUserName = this.authService.getUserInfo()?.name ?? '';
 
@@ -83,6 +77,7 @@ export class UserHoursComponent implements OnInit {
         responsible_user: this.selectedUserName,
       });
       this.calculateHours();
+      this.isFirstLoad = false;
     }
 
     this.form.valueChanges.subscribe(() => {
@@ -90,25 +85,12 @@ export class UserHoursComponent implements OnInit {
     });
   }
 
-  private _filterUsers(value: string): { id: number; name: string }[] {
-    const filterValue = value.toLowerCase();
-    return this.users.filter((user) =>
-      user.username.toLowerCase().includes(filterValue)
-    );
-  }
-
   calculateHours() {
-    // if (
-    //   this.timeLogForm.controls.user.value &&
-    //   this.timeLogForm.controls.user.value in this.users
-    // ) {
-    //   this.userService.ge;
-    // }
     const start = this.dateService.formatDateToString(
       this.form.value.start_date
     );
     const end = this.dateService.formatDateToString(this.form.value.end_date);
-    console.log(this.selectedUserId, start, end);
+    // console.log(this.selectedUserId, start, end);
     this.timelogService
       .getTotalHoursByUserOverPeriod(this.selectedUserId, start, end)
       .subscribe({
@@ -120,7 +102,7 @@ export class UserHoursComponent implements OnInit {
 
   getUsers() {
     const query = this.form.get('responsible_user')?.value;
-    if (query.length > 1) {
+    if (query.length > 0) {
       this.userService.getUsers().subscribe((users) => {
         this.users = users;
         this.filteredUsers = this.users.filter((user) =>
