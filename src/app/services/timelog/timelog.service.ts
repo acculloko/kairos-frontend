@@ -19,6 +19,10 @@ export class TimelogService {
     return this.http.get<Timelog>(`${this.API_URL}/timelog/${id}`);
   }
 
+  getLogsByUserId(id: string | number) {
+    return this.http.get<Array<Timelog>>(`${this.API_URL}/timelog/user/${id}`);
+  }
+
   getTotalHours() {
     return this.http.get<number>(`${this.API_URL}/timelog/total-logged-hours`);
   }

@@ -23,6 +23,7 @@ import { TimelogCreationFormComponent } from '../../components/timelogger/timelo
 import { TimelogCreationRequest } from '../../models/timelog/timelogCreationRequest.type';
 import { TimelogEditingFormComponent } from '../../components/timelogger/timelog-editing-form/timelog-editing-form.component';
 import { TimelogDeleteConfirmationComponent } from '../../components/timelogger/timelog-delete-confirmation/timelog-delete-confirmation.component';
+import { AdminTimeloggerComponent } from '../../components/timelogger/admin-timelogger/admin-timelogger.component';
 
 @Component({
   selector: 'app-timelogger',
@@ -37,6 +38,7 @@ import { TimelogDeleteConfirmationComponent } from '../../components/timelogger/
     MatSelectModule,
     FormsModule,
     MatIconModule,
+    AdminTimeloggerComponent,
   ],
   templateUrl: './timelogger.component.html',
   styleUrl: './timelogger.component.scss',
@@ -56,7 +58,6 @@ export class TimeloggerComponent implements OnInit {
   displayedColumns: string[] = [
     'id',
     'description',
-    'user',
     'task',
     'start_date',
     'end_date',
@@ -75,103 +76,109 @@ export class TimeloggerComponent implements OnInit {
     { label: 'Logged At', value: 'log_time' },
   ];
 
+  isAdmin: boolean = false;
+
   timelogList: Array<Timelog> = [];
   timelogDataSource = new MatTableDataSource<Timelog>();
 
   ngOnInit(): void {
+    if (this.authService.getUserInfo()?.role === 'ADMIN') {
+      this.isAdmin = true;
+    }
     this.getLogs();
-    this.authService.getUserInfo();
   }
 
   getLogs() {
-    this.timelogService.getLogs().subscribe({
-      next: (response: any) => {
-        this.timelogList = response.map((timelog: Timelog) => ({
-          ...timelog,
-          start_date: this.dateService.parseDate(
-            timelog.start_date,
-            'dd/MM/yyyy HH:mm:ss'
-          ),
-          end_date: this.dateService.parseDate(
-            timelog.end_date,
-            'dd/MM/yyyy HH:mm:ss'
-          ),
-          log_time: this.dateService.parseDate(
-            timelog.log_time,
-            'dd/MM/yyyy HH:mm:ss'
-          ),
-          task: {
-            ...timelog.task,
+    this.timelogService
+      .getLogsByUserId(this.authService.getUserInfo()?.id ?? '')
+      .subscribe({
+        next: (response: any) => {
+          this.timelogList = response.map((timelog: Timelog) => ({
+            ...timelog,
             start_date: this.dateService.parseDate(
-              timelog.task.start_date,
-              'dd/MM/yyyy'
-            ),
-            end_date: this.dateService.parseDate(
-              timelog.task.end_date,
-              'dd/MM/yyyy'
-            ),
-            creation_date: this.dateService.parseDate(
-              timelog.task.creation_date,
+              timelog.start_date,
               'dd/MM/yyyy HH:mm:ss'
             ),
-            responsible_user: {
-              ...timelog.task.responsible_user,
-              creation_date: this.dateService.parseDate(
-                timelog.task.responsible_user.creation_date,
-                'dd/MM/yyyy HH:mm:ss'
-              ),
-              last_login: timelog.task.responsible_user.last_login
-                ? this.dateService.parseDate(
-                    timelog.task.responsible_user.last_login,
-                    'dd/MM/yyyy HH:mm:ss'
-                  )
-                : null,
-            },
-            project: {
-              ...timelog.task.project,
+            end_date: this.dateService.parseDate(
+              timelog.end_date,
+              'dd/MM/yyyy HH:mm:ss'
+            ),
+            log_time: this.dateService.parseDate(
+              timelog.log_time,
+              'dd/MM/yyyy HH:mm:ss'
+            ),
+            task: {
+              ...timelog.task,
               start_date: this.dateService.parseDate(
-                timelog.task.project.start_date,
+                timelog.task.start_date,
                 'dd/MM/yyyy'
               ),
               end_date: this.dateService.parseDate(
-                timelog.task.project.end_date,
+                timelog.task.end_date,
                 'dd/MM/yyyy'
               ),
               creation_date: this.dateService.parseDate(
-                timelog.task.project.creation_date,
+                timelog.task.creation_date,
+                'dd/MM/yyyy HH:mm:ss'
+              ),
+              responsible_user: {
+                ...timelog.task.responsible_user,
+                creation_date: this.dateService.parseDate(
+                  timelog.task.responsible_user.creation_date,
+                  'dd/MM/yyyy HH:mm:ss'
+                ),
+                last_login: timelog.task.responsible_user.last_login
+                  ? this.dateService.parseDate(
+                      timelog.task.responsible_user.last_login,
+                      'dd/MM/yyyy HH:mm:ss'
+                    )
+                  : null,
+              },
+              project: {
+                ...timelog.task.project,
+                start_date: this.dateService.parseDate(
+                  timelog.task.project.start_date,
+                  'dd/MM/yyyy'
+                ),
+                end_date: this.dateService.parseDate(
+                  timelog.task.project.end_date,
+                  'dd/MM/yyyy'
+                ),
+                creation_date: this.dateService.parseDate(
+                  timelog.task.project.creation_date,
+                  'dd/MM/yyyy HH:mm:ss'
+                ),
+              },
+            },
+            user: {
+              ...timelog.user,
+              creation_date: this.dateService.parseDate(
+                timelog.user.creation_date,
+                'dd/MM/yyyy HH:mm:ss'
+              ),
+              last_login: this.dateService.parseDate(
+                timelog.user.last_login,
                 'dd/MM/yyyy HH:mm:ss'
               ),
             },
-          },
-          user: {
-            ...timelog.user,
-            creation_date: this.dateService.parseDate(
-              timelog.user.creation_date,
-              'dd/MM/yyyy HH:mm:ss'
-            ),
-            last_login: this.dateService.parseDate(
-              timelog.user.last_login,
-              'dd/MM/yyyy HH:mm:ss'
-            ),
-          },
-        }));
+          }));
 
-        this.timelogDataSource = new MatTableDataSource<Timelog>(
-          this.timelogList
-        );
-        // console.log(this.timelogDataSource);
-      },
-      error: (err) => {
-        console.error(err);
-        throw err;
-      },
-      complete: () => {
-        this.timelogDataSource.paginator = this.paginator;
-        this.timelogDataSource.sort = this.sort;
-        this.setupFilterPredicate();
-        this.setupSorting();
-      },
-    });
+          this.timelogDataSource = new MatTableDataSource<Timelog>(
+            this.timelogList
+          );
+          // console.log(this.timelogDataSource);
+        },
+        error: (err) => {
+          console.error(err);
+          throw err;
+        },
+        complete: () => {
+          this.timelogDataSource.paginator = this.paginator;
+          this.timelogDataSource.sort = this.sort;
+          this.setupFilterPredicate();
+          this.setupSorting();
+        },
+      });
   }
 
   onSearch(event: Event) {
