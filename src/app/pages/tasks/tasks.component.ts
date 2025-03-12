@@ -92,34 +92,38 @@ export class TasksComponent implements OnInit {
             task.creation_date,
             'dd/MM/yyyy HH:mm:ss'
           ),
-          responsible_user: {
-            ...task.responsible_user,
-            creation_date: this.dateService.parseDate(
-              task.responsible_user.creation_date,
-              'dd/MM/yyyy HH:mm:ss'
-            ),
-            last_login: task.responsible_user.last_login
-              ? this.dateService.parseDate(
-                  task.responsible_user.last_login,
+          responsible_user: task.responsible_user
+            ? {
+                ...task.responsible_user,
+                creation_date: this.dateService.parseDate(
+                  task.responsible_user.creation_date,
                   'dd/MM/yyyy HH:mm:ss'
-                )
-              : null,
-          },
-          project: {
-            ...task.project,
-            start_date: this.dateService.parseDate(
-              task.project.start_date,
-              'dd/MM/yyyy'
-            ),
-            end_date: this.dateService.parseDate(
-              task.project.end_date,
-              'dd/MM/yyyy'
-            ),
-            creation_date: this.dateService.parseDate(
-              task.project.creation_date,
-              'dd/MM/yyyy HH:mm:ss'
-            ),
-          },
+                ),
+                last_login: task.responsible_user.last_login
+                  ? this.dateService.parseDate(
+                      task.responsible_user.last_login,
+                      'dd/MM/yyyy HH:mm:ss'
+                    )
+                  : null,
+              }
+            : null,
+          project: task.project
+            ? {
+                ...task.project,
+                start_date: this.dateService.parseDate(
+                  task.project.start_date,
+                  'dd/MM/yyyy'
+                ),
+                end_date: this.dateService.parseDate(
+                  task.project.end_date,
+                  'dd/MM/yyyy'
+                ),
+                creation_date: this.dateService.parseDate(
+                  task.project.creation_date,
+                  'dd/MM/yyyy HH:mm:ss'
+                ),
+              }
+            : null,
         }));
 
         this.taskDataSource = new MatTableDataSource<Task>(this.taskList);

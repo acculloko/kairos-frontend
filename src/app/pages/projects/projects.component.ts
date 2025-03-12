@@ -95,19 +95,21 @@ export class ProjectsComponent implements OnInit {
             project.creation_date,
             'dd/MM/yyyy HH:mm:ss'
           ),
-          responsible_user: {
-            ...project.responsible_user,
-            creation_date: this.dateService.parseDate(
-              project.responsible_user.creation_date,
-              'dd/MM/yyyy HH:mm:ss'
-            ),
-            last_login: project.responsible_user.last_login
-              ? this.dateService.parseDate(
-                  project.responsible_user.last_login,
+          responsible_user: project.responsible_user
+            ? {
+                ...project.responsible_user,
+                creation_date: this.dateService.parseDate(
+                  project.responsible_user.creation_date,
                   'dd/MM/yyyy HH:mm:ss'
-                )
-              : null,
-          },
+                ),
+                last_login: project.responsible_user.last_login
+                  ? this.dateService.parseDate(
+                      project.responsible_user.last_login,
+                      'dd/MM/yyyy HH:mm:ss'
+                    )
+                  : null,
+              }
+            : null,
         }));
 
         this.projectDataSource = new MatTableDataSource<Project>(

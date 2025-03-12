@@ -64,7 +64,7 @@
     </td>
   </ng-container>
 
-  <!-- Responsible User -->
+  <!-- Project -->
   <ng-container matColumnDef="project">
     <th
       mat-header-cell
@@ -74,7 +74,9 @@
     >
       Project
     </th>
-    <td mat-cell *matCellDef="let entry">{{ entry.project.name }}</td>
+    <td mat-cell *matCellDef="let entry">
+      {{ entry.project?.name ?? "No Linked Project" }}
+    </td>
   </ng-container>
 
   <!-- Responsible User -->
@@ -87,7 +89,9 @@
     >
       Responsible User
     </th>
-    <td mat-cell *matCellDef="let entry">{{ entry.responsible_user.name }}</td>
+    <td mat-cell *matCellDef="let entry">
+      {{ entry.responsible_user?.name ?? "No Linked User" }}
+    </td>
   </ng-container>
 
   <!-- Start Date -->

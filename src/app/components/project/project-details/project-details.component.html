@@ -86,7 +86,9 @@
     >
       Responsible User
     </th>
-    <td mat-cell *matCellDef="let entry">{{ entry.responsible_user.name }}</td>
+    <td mat-cell *matCellDef="let entry">
+      {{ entry?.responsible_user?.name ?? "No Linked User" }}
+    </td>
   </ng-container>
 
   <!-- Start Date -->
