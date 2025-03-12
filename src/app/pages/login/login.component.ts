@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { UserService } from '../../services/user/user.service';
 import { catchError } from 'rxjs';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -16,6 +17,8 @@ export class LoginComponent {
   userService = inject(UserService);
   authService = inject(AuthService);
   router = inject(Router);
+
+  snackBar = inject(MatSnackBar);
 
   loginObj: LoginRequest = {
     login: '',
@@ -30,14 +33,17 @@ export class LoginComponent {
       .pipe(
         catchError((err) => {
           console.log(err);
-          alert('Login failed!');
+          this.snackBar.open('Something went wrong!', 'Close');
           throw err;
         })
       )
       .subscribe((res: any) => {
         if (res.token) {
           localStorage.setItem('Token', res.token);
-          alert('Welcome ' + this.authService.getUserInfo()?.name);
+          this.snackBar.open(
+            'Welcome ' + this.authService.getUserInfo()?.name,
+            'Close'
+          );
           this.router.navigateByUrl('dashboard');
         }
       });
