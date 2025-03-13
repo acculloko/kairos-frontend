@@ -24,6 +24,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { ProjectCreationFormComponent } from '../../components/project/project-creation-form/project-creation-form.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-projects',
@@ -37,6 +38,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatInputModule,
     MatSelectModule,
     FormsModule,
+    MatIconModule,
   ],
   templateUrl: './projects.component.html',
   styleUrls: ['./projects.component.scss', '../../../styles.scss'],

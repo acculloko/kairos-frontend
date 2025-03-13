@@ -1,20 +1,25 @@
 <h1>Tasks</h1>
 
-<button mat-button color="primary" (click)="createTask()">Create Task</button>
+<div class="table-header">
+  <mat-form-field appearance="outline">
+    <mat-label>Filter by</mat-label>
+    <mat-select [(ngModel)]="selectedFilterField">
+      <mat-option *ngFor="let field of filterableFields" [value]="field.value">
+        {{ field.label }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 
-<mat-form-field appearance="outline">
-  <mat-label>Filter by</mat-label>
-  <mat-select [(ngModel)]="selectedFilterField">
-    <mat-option *ngFor="let field of filterableFields" [value]="field.value">
-      {{ field.label }}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Filter</mat-label>
+    <input matInput (keyup)="onSearch($event)" />
+  </mat-form-field>
 
-<mat-form-field appearance="outline">
-  <mat-label>Filter</mat-label>
-  <input matInput (keyup)="onSearch($event)" />
-</mat-form-field>
+  <button mat-button color="primary" (click)="createTask()">
+    Create Task
+    <mat-icon iconPositionEnd class="right-icon">add</mat-icon>
+  </button>
+</div>
 
 <table mat-table [dataSource]="taskDataSource" matSort class="mat-elevation-z8">
   <!-- Columns Definition -->
@@ -171,6 +176,7 @@
 </table>
 
 <mat-paginator
+  [pageSize]="10"
   [pageSizeOptions]="[5, 10, 20]"
   showFirstLastButtons
 ></mat-paginator>

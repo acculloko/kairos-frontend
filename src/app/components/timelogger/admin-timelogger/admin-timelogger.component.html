@@ -1,18 +1,20 @@
 <h1>Admin Log Viewer</h1>
 
-<mat-form-field appearance="outline">
-  <mat-label>Filter by</mat-label>
-  <mat-select [(ngModel)]="selectedFilterField">
-    <mat-option *ngFor="let field of filterableFields" [value]="field.value">
-      {{ field.label }}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
+<div class="table-header">
+  <mat-form-field appearance="outline">
+    <mat-label>Filter by</mat-label>
+    <mat-select [(ngModel)]="selectedFilterField">
+      <mat-option *ngFor="let field of filterableFields" [value]="field.value">
+        {{ field.label }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 
-<mat-form-field appearance="outline">
-  <mat-label>Filter</mat-label>
-  <input matInput (keyup)="onSearch($event)" />
-</mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Filter</mat-label>
+    <input matInput (keyup)="onSearch($event)" />
+  </mat-form-field>
+</div>
 
 <table
   mat-table

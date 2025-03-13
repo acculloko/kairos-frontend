@@ -53,6 +53,19 @@ body {
   }
 }
 
+::ng-deep .table-header {
+  margin-top: 60px;
+  display: flex;
+  align-items: center;
+  gap: 16px; /* Space between form fields */
+  width: 100%;
+  button {
+    margin-left: auto; /* Pushes the button to the right */
+    white-space: nowrap; /* Prevents text from wrapping */
+    font-size: medium;
+  }
+}
+
 ::ng-deep .table-icon {
   color: var(--mat-sys-primary);
 }
