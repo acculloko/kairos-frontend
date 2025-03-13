@@ -45,7 +45,11 @@ export class LoginComponent {
       .subscribe((res: any) => {
         if (res.token) {
           localStorage.setItem('Token', res.token);
-          this.snackBar.open('Welcome ' + this.authService.getUserInfo()?.name);
+          this.snackBar.open(
+            'Welcome, ' + this.authService.getUserInfo()?.name + '!',
+            '',
+            { duration: 3000 }
+          );
           this.router.navigateByUrl('dashboard');
         }
       });
