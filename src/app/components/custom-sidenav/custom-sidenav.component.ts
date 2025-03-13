@@ -24,6 +24,9 @@ export class CustomSidenavComponent implements OnInit {
   name: string = this.authService.getUserInfo()?.name ?? '';
   role: string = this.authService.getUserInfo()?.role ?? '';
 
+  logoPath: string =
+    '../../../assets/kairos-high-resolution-logo-transparent-cropped.svg';
+
   menuItems = signal<MenuItem[]>([
     {
       icon: 'speed',
@@ -53,6 +56,16 @@ export class CustomSidenavComponent implements OnInit {
   ]);
 
   ngOnInit(): void {
+    // const currentTheme = this.detectSystemTheme();
+    // console.log('Detected theme:', currentTheme);
+    // if (currentTheme === 'dark') {
+    //   this.logoPath =
+    //     '../../../assets/kairos-high-resolution-logo-transparent-dark-mode-cropped.svg';
+    // } else {
+    //   this.logoPath =
+    //     '../../../assets/kairos-high-resolution-logo-transparent-cropped.svg';
+    // }
+
     if (this.role != 'ADMIN') {
       this.menuItems = signal<MenuItem[]>([
         {
@@ -82,5 +95,11 @@ export class CustomSidenavComponent implements OnInit {
   logout() {
     this.router.navigate(['']);
     localStorage.removeItem('Token');
+  }
+
+  detectSystemTheme(): string {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light';
   }
 }
