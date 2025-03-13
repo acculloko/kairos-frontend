@@ -24,6 +24,7 @@ import { TimelogCreationRequest } from '../../models/timelog/timelogCreationRequ
 import { TimelogEditingFormComponent } from '../../components/timelogger/timelog-editing-form/timelog-editing-form.component';
 import { TimelogDeleteConfirmationComponent } from '../../components/timelogger/timelog-delete-confirmation/timelog-delete-confirmation.component';
 import { AdminTimeloggerComponent } from '../../components/timelogger/admin-timelogger/admin-timelogger.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-timelogger',
@@ -41,7 +42,7 @@ import { AdminTimeloggerComponent } from '../../components/timelogger/admin-time
     AdminTimeloggerComponent,
   ],
   templateUrl: './timelogger.component.html',
-  styleUrl: './timelogger.component.scss',
+  styleUrls: ['./timelogger.component.scss', '../../../styles.scss'],
 })
 export class TimeloggerComponent implements OnInit {
   dialog = inject(MatDialog);
@@ -50,6 +51,8 @@ export class TimeloggerComponent implements OnInit {
   taskService = inject(TaskService);
   dateService = inject(DateService);
   authService = inject(AuthService);
+
+  snackBar = inject(MatSnackBar);
 
   //MatTable
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -169,6 +172,9 @@ export class TimeloggerComponent implements OnInit {
           // console.log(this.timelogDataSource);
         },
         error: (err) => {
+          this.snackBar.open("Couldn't get logs!", 'Dismiss', {
+            panelClass: ['error-snackbar'],
+          });
           console.error(err);
           throw err;
         },
@@ -273,6 +279,9 @@ export class TimeloggerComponent implements OnInit {
         this.timelogService.logTime(formattedResult).subscribe({
           next: (response) => {
             console.log('Time logged successfully:', response);
+            this.snackBar.open('Time logged successfully!', 'Dismiss', {
+              panelClass: ['success-snackbar'],
+            });
             // Forces component to reload in order to show changes in the list.
             this.ngZone.run(() => {
               this.ngOnInit();
@@ -280,6 +289,9 @@ export class TimeloggerComponent implements OnInit {
           },
           error: (error) => {
             console.error('Error creating timelog:', error);
+            this.snackBar.open('Error creating timelog!', 'Dismiss', {
+              panelClass: ['error-snackbar'],
+            });
             // Forces component to reload in order to show changes in the list.
             this.ngZone.run(() => {
               this.ngOnInit();
@@ -308,14 +320,20 @@ export class TimeloggerComponent implements OnInit {
 
         this.timelogService.editLog(formattedResult, id).subscribe({
           next: (response) => {
-            console.log('Time logged successfully:', response);
+            console.log('Timelog updated successfully:', response);
+            this.snackBar.open('Timelog updated successfully!', 'Dismiss', {
+              panelClass: ['success-snackbar'],
+            });
             // Forces component to reload in order to show changes in the list.
             this.ngZone.run(() => {
               this.ngOnInit();
             });
           },
           error: (error) => {
-            console.error('Error creating timelog:', error);
+            console.error('Error updating timelog:', error);
+            this.snackBar.open('Error updating timelog!', 'Dismiss', {
+              panelClass: ['error-snackbar'],
+            });
             // Forces component to reload in order to show changes in the list.
             this.ngZone.run(() => {
               this.ngOnInit();
@@ -337,6 +355,9 @@ export class TimeloggerComponent implements OnInit {
         this.timelogService.deleteLog(id).subscribe({
           next: (response) => {
             console.log('timelog deleted successfully:', response);
+            this.snackBar.open('Timelog deleted successfully!', 'Dismiss', {
+              panelClass: ['success-snackbar'],
+            });
             // Forces component to reload in order to show changes in the list.
             this.ngZone.run(() => {
               this.ngOnInit();
@@ -344,6 +365,9 @@ export class TimeloggerComponent implements OnInit {
           },
           error: (error) => {
             console.error('error deleting timelog:', error);
+            this.snackBar.open('Error deleting timelog!', 'Dismiss', {
+              panelClass: ['error-snackbar'],
+            });
             // Forces component to reload in order to show changes in the list.
             this.ngZone.run(() => {
               this.ngOnInit();

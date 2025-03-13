@@ -23,6 +23,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { ProjectCreationFormComponent } from '../../components/project/project-creation-form/project-creation-form.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-projects',
@@ -38,7 +39,7 @@ import { ProjectCreationFormComponent } from '../../components/project/project-c
     FormsModule,
   ],
   templateUrl: './projects.component.html',
-  styleUrl: './projects.component.scss',
+  styleUrls: ['./projects.component.scss', '../../../styles.scss'],
 })
 export class ProjectsComponent implements OnInit {
   cdr = inject(ChangeDetectorRef);
@@ -47,6 +48,8 @@ export class ProjectsComponent implements OnInit {
   projectService = inject(ProjectService);
   dateService = inject(DateService);
   ngZone = inject(NgZone);
+
+  snackBar = inject(MatSnackBar);
 
   // MatTable
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -118,6 +121,9 @@ export class ProjectsComponent implements OnInit {
         console.log(this.projectDataSource);
       },
       error: (err) => {
+        this.snackBar.open("Couldn't get projects!", 'Dismiss', {
+          panelClass: ['error-snackbar'],
+        });
         console.error(err);
         throw err;
       },
@@ -222,6 +228,9 @@ export class ProjectsComponent implements OnInit {
         this.projectService.createProject(formattedResult).subscribe({
           next: (response) => {
             console.log('project created successfully:', response);
+            this.snackBar.open('Project created successfully!', 'Dismiss', {
+              panelClass: ['success-snackbar'],
+            });
             // Forces component to reload in order to show changes in the list.
             this.ngZone.run(() => {
               this.ngOnInit();
@@ -229,6 +238,9 @@ export class ProjectsComponent implements OnInit {
           },
           error: (error) => {
             console.error('error creating project:', error);
+            this.snackBar.open('Error creating project!', 'Dismiss', {
+              panelClass: ['error-snackbar'],
+            });
             // Forces component to reload in order to show changes in the list.
             this.ngZone.run(() => {
               this.ngOnInit();

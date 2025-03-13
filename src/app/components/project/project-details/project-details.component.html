@@ -14,19 +14,88 @@
   Create Child Task
 </button>
 
-<mat-form-field appearance="outline">
-  <mat-label>Filter by</mat-label>
-  <mat-select [(ngModel)]="selectedFilterField">
-    <mat-option *ngFor="let field of filterableFields" [value]="field.value">
-      {{ field.label }}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
+<div class="filter-container">
+  <!-- Start Date Filter -->
+  <mat-form-field appearance="outline">
+    <mat-label>Start Date</mat-label>
+    <input
+      matInput
+      [matDatepicker]="startDatePicker"
+      [(ngModel)]="filterValues.startDate"
+      (dateChange)="applyFilters()"
+    />
+    <mat-datepicker-toggle
+      matIconSuffix
+      [for]="startDatePicker"
+    ></mat-datepicker-toggle>
+    <mat-datepicker #startDatePicker></mat-datepicker>
+  </mat-form-field>
 
-<mat-form-field appearance="outline">
-  <mat-label>Filter</mat-label>
-  <input matInput (keyup)="onSearch($event)" />
-</mat-form-field>
+  <!-- End Date Filter -->
+  <mat-form-field appearance="outline">
+    <mat-label>End Date</mat-label>
+    <input
+      matInput
+      [matDatepicker]="endDatePicker"
+      [(ngModel)]="filterValues.endDate"
+      (dateChange)="applyFilters()"
+    />
+    <mat-datepicker-toggle
+      matIconSuffix
+      [for]="endDatePicker"
+    ></mat-datepicker-toggle>
+    <mat-datepicker #endDatePicker></mat-datepicker>
+  </mat-form-field>
+
+  <!-- Responsible User Filter -->
+  <mat-form-field appearance="outline">
+    <mat-label>Responsible User</mat-label>
+    <input
+      matInput
+      [(ngModel)]="filterValues.responsible_user"
+      (keyup)="applyFilters()"
+      placeholder="Type name"
+    />
+  </mat-form-field>
+
+  <!-- Status Filter (Mat-Select Dropdown) -->
+  <mat-form-field appearance="outline">
+    <mat-label>Status</mat-label>
+    <mat-select
+      [(ngModel)]="filterValues.status"
+      (selectionChange)="applyFilters()"
+    >
+      <mat-option value="">All</mat-option>
+      <mat-option *ngFor="let status of statusOptions" [value]="status">{{
+        status
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Task Name Filter -->
+  <mat-form-field appearance="outline">
+    <mat-label>Task Name</mat-label>
+    <input
+      matInput
+      [(ngModel)]="filterValues.name"
+      (keyup)="applyFilters()"
+      placeholder="Type task name"
+    />
+  </mat-form-field>
+
+  <!-- Description Filter -->
+  <mat-form-field appearance="outline">
+    <mat-label>Task Description</mat-label>
+    <input
+      matInput
+      [(ngModel)]="filterValues.description"
+      (keyup)="applyFilters()"
+      placeholder="Type description"
+    />
+  </mat-form-field>
+
+  <button mat-button (click)="resetFilters()">Reset Filters</button>
+</div>
 
 <table mat-table [dataSource]="taskDataSource" matSort class="mat-elevation-z8">
   <!-- Columns Definition -->

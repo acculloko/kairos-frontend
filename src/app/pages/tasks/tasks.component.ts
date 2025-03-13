@@ -19,6 +19,7 @@ import { TaskCreationRequest } from '../../models/task/taskCreationRequest.type'
 import { MatIconModule } from '@angular/material/icon';
 import { TaskCreationFormComponent } from '../../components/task/task-creation-form/task-creation-form.component';
 import { TaskEditingFormComponent } from '../../components/task/task-editing-form/task-editing-form.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-tasks',
@@ -35,7 +36,7 @@ import { TaskEditingFormComponent } from '../../components/task/task-editing-for
     MatIconModule,
   ],
   templateUrl: './tasks.component.html',
-  styleUrl: './tasks.component.scss',
+  styleUrls: ['./tasks.component.scss', '../../../styles.scss'],
 })
 export class TasksComponent implements OnInit {
   dialog = inject(MatDialog);
@@ -43,6 +44,8 @@ export class TasksComponent implements OnInit {
   projectService = inject(ProjectService);
   taskService = inject(TaskService);
   dateService = inject(DateService);
+
+  snackBar = inject(MatSnackBar);
 
   //MatTable
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -130,11 +133,13 @@ export class TasksComponent implements OnInit {
         console.log(this.taskDataSource);
       },
       error: (err) => {
+        this.snackBar.open("Couldn't get Tasks!", 'Dismiss', {
+          panelClass: ['error-snackbar'],
+        });
         console.error(err);
         throw err;
       },
       complete: () => {
-        console.log('complete');
         this.taskDataSource.paginator = this.paginator;
         this.taskDataSource.sort = this.sort;
         this.setupFilterPredicate();
@@ -237,6 +242,9 @@ export class TasksComponent implements OnInit {
         this.taskService.createTask(formattedResult).subscribe({
           next: (response) => {
             console.log('Task created successfully:', response);
+            this.snackBar.open('Task created Successfully!', 'Dismiss', {
+              panelClass: ['success-snackbar'],
+            });
             // Forces component to reload in order to show changes in the list.
             this.ngZone.run(() => {
               this.ngOnInit();
@@ -244,6 +252,9 @@ export class TasksComponent implements OnInit {
           },
           error: (error) => {
             console.error('Error creating task:', error);
+            this.snackBar.open('Error creating task!', 'Dismiss', {
+              panelClass: ['error-snackbar'],
+            });
             // Forces component to reload in order to show changes in the list.
             this.ngZone.run(() => {
               this.ngOnInit();
@@ -274,14 +285,20 @@ export class TasksComponent implements OnInit {
 
         this.taskService.editTask(formattedResult, id).subscribe({
           next: (response) => {
-            console.log('Task created successfully:', response);
+            console.log('Task updated successfully:', response);
+            this.snackBar.open('Task updated Successfully!', 'Dismiss', {
+              panelClass: ['success-snackbar'],
+            });
             // Forces component to reload in order to show changes in the list.
             this.ngZone.run(() => {
               this.ngOnInit();
             });
           },
           error: (error) => {
-            console.error('Error creating task:', error);
+            console.error('Error updating task:', error);
+            this.snackBar.open('Error updating task!', 'Dismiss', {
+              panelClass: ['error-snackbar'],
+            });
             // Forces component to reload in order to show changes in the list.
             this.ngZone.run(() => {
               this.ngOnInit();
@@ -302,6 +319,9 @@ export class TasksComponent implements OnInit {
         this.taskService.deleteTask(id).subscribe({
           next: (response) => {
             console.log('task deleted successfully:', response);
+            this.snackBar.open('Task deleted Successfully!', 'Dismiss', {
+              panelClass: ['success-snackbar'],
+            });
             // Forces component to reload in order to show changes in the list.
             this.ngZone.run(() => {
               this.ngOnInit();
@@ -309,6 +329,13 @@ export class TasksComponent implements OnInit {
           },
           error: (error) => {
             console.error('error deleting task:', error);
+            this.snackBar.open(
+              'Error deleting task! (Task likely has time logs linked to it)',
+              'Dismiss',
+              {
+                panelClass: ['error-snackbar'],
+              }
+            );
             // Forces component to reload in order to show changes in the list.
             this.ngZone.run(() => {
               this.ngOnInit();

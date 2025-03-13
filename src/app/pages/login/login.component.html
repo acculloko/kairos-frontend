@@ -1,19 +1,32 @@
-<p>login works!</p>
+<div class="login-container">
+  <form class="login-form">
+    <!-- Email Input -->
+    <mat-form-field appearance="outline">
+      <mat-label>Username</mat-label>
+      <input
+        matInput
+        type="email"
+        name="login"
+        [(ngModel)]="loginObj.login"
+        required
+      />
+    </mat-form-field>
 
-<div>
-  <form class="login">
-    <input
-      type="email"
-      name="login"
-      [(ngModel)]="loginObj.login"
-      placeholder="username"
-    />
-    <input
-      type="password"
-      name="password"
-      [(ngModel)]="loginObj.password"
-      placeholder="password"
-    />
-    <button (click)="onLogin()">Log in</button>
+    <!-- Password Input -->
+    <mat-form-field appearance="outline">
+      <mat-label>Password</mat-label>
+      <input
+        matInput
+        type="password"
+        name="password"
+        [(ngModel)]="loginObj.password"
+        required
+      />
+    </mat-form-field>
+
+    <!-- Login Button -->
+    <button mat-raised-button color="primary" (click)="onLogin()">
+      Log in
+    </button>
   </form>
 </div>

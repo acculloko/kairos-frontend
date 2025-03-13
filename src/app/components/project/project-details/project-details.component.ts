@@ -24,6 +24,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { ProjectEditingFormComponent } from '../project-editing-form/project-editing-form.component';
 import { TaskCreationFormComponent } from '../../task/task-creation-form/task-creation-form.component';
 import { TaskEditingFormComponent } from '../../task/task-editing-form/task-editing-form.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-project-details',
@@ -38,9 +40,10 @@ import { TaskEditingFormComponent } from '../../task/task-editing-form/task-edit
     MatSelectModule,
     FormsModule,
     MatIconModule,
+    MatDatepickerModule,
   ],
   templateUrl: './project-details.component.html',
-  styleUrl: './project-details.component.scss',
+  styleUrls: ['./project-details.component.scss', '../../../../styles.scss'],
 })
 export class ProjectDetailsComponent implements OnInit {
   route = inject(ActivatedRoute);
@@ -50,6 +53,8 @@ export class ProjectDetailsComponent implements OnInit {
   projectService = inject(ProjectService);
   taskService = inject(TaskService);
   dateService = inject(DateService);
+
+  snackBar = inject(MatSnackBar);
 
   project: any;
 
@@ -69,17 +74,16 @@ export class ProjectDetailsComponent implements OnInit {
     'actions',
   ];
 
-  selectedFilterField: string = 'name';
-  filterableFields = [
-    { label: 'Id', value: 'id' },
-    { label: 'Name', value: 'name' },
-    { label: 'Description', value: 'description' },
-    { label: 'Responsible User', value: 'responsible_user.name' },
-    { label: 'Start Date', value: 'start_date' },
-    { label: 'End Date', value: 'end_date' },
-    { label: 'Status', value: 'status' },
-    { label: 'Creation Date', value: 'creation_date' },
-  ];
+  filterValues: {
+    startDate?: Date;
+    endDate?: Date;
+    responsible_user?: string;
+    status?: string;
+    name?: string;
+    description?: string;
+  } = {};
+
+  statusOptions: string[] = ['OPEN', 'ONGOING', 'DONE', 'PAUSED', 'CANCELLED'];
 
   taskList: Array<Task> = [];
   taskDataSource = new MatTableDataSource<Task>();
@@ -142,14 +146,20 @@ export class ProjectDetailsComponent implements OnInit {
         };
         this.projectService.editProject(formattedResult, id).subscribe({
           next: (response) => {
-            console.log('project edited successfully:', response);
+            console.log('project updated successfully:', response);
+            this.snackBar.open('Project updated successfully!', 'Dismiss', {
+              panelClass: ['success-snackbar'],
+            });
             // Forces component to reload in order to show changes in the list.
             this.ngZone.run(() => {
               this.ngOnInit();
             });
           },
           error: (error) => {
-            console.error('error editing project:', error);
+            console.error('error updating project:', error);
+            this.snackBar.open('Error updating project!', 'Dismiss', {
+              panelClass: ['error-snackbar'],
+            });
             // Forces component to reload in order to show changes in the list.
             this.ngZone.run(() => {
               this.ngOnInit();
@@ -170,9 +180,15 @@ export class ProjectDetailsComponent implements OnInit {
         this.projectService.deleteProject(id).subscribe({
           next: (response) => {
             console.log('project deleted successfully:', response);
+            this.snackBar.open('Project deleted successfully!', 'Dismiss', {
+              panelClass: ['success-snackbar'],
+            });
           },
           error: (error) => {
             console.error('error deleting project:', error);
+            this.snackBar.open('Error deleting project!', 'Dismiss', {
+              panelClass: ['error-snackbar'],
+            });
             // Forces component to reload in order to show changes in the list.
             this.ngZone.run(() => {
               this.ngOnInit();
@@ -235,6 +251,9 @@ export class ProjectDetailsComponent implements OnInit {
         console.log(this.taskDataSource);
       },
       error: (err) => {
+        this.snackBar.open("Couldn't get tasks!", 'Dismiss', {
+          panelClass: ['error-snackbar'],
+        });
         console.error(err);
         throw err;
       },
@@ -253,39 +272,93 @@ export class ProjectDetailsComponent implements OnInit {
     this.taskDataSource.filter = searchValue.trim().toLowerCase();
   }
 
-  setupFilterPredicate() {
-    this.taskDataSource.filterPredicate = (data: Task, filter: string) => {
-      if (!this.selectedFilterField || !filter) return true;
+  applyFilters(): void {
+    this.taskDataSource.filter = JSON.stringify(this.filterValues); // Trigger filtering
+  }
 
-      let fieldValue: string = '';
+  resetFilters(): void {
+    this.filterValues = {}; // Reset all filter values
+    this.applyFilters(); // Reapply empty filters to reset table
+  }
 
-      if (this.selectedFilterField === 'id') {
-        fieldValue = data.id.toString();
-      } else if (this.selectedFilterField === 'start_date' && data.start_date) {
-        fieldValue =
-          this.dateService.formatDate(data.start_date, 'dd/MM/yyyy') || '';
-      } else if (this.selectedFilterField === 'end_date' && data.end_date) {
-        fieldValue =
-          this.dateService.formatDate(data.end_date, 'dd/MM/yyyy') || '';
-      } else if (
-        this.selectedFilterField === 'creation_date' &&
-        data.creation_date
-      ) {
-        fieldValue =
-          this.dateService.formatDate(
-            data.creation_date,
-            'dd/MM/yyyy HH:mm:ss'
-          ) || '';
-      } else if (
-        this.selectedFilterField === 'responsible_user.name' &&
-        data.responsible_user
-      ) {
-        fieldValue = data.responsible_user.name || '';
-      } else {
-        fieldValue = (data as any)[this.selectedFilterField] || '';
-      }
+  setupFilterPredicate(): void {
+    this.taskDataSource.filterPredicate = (
+      data: Task,
+      filter: string
+    ): boolean => {
+      const searchValues = JSON.parse(filter); // Parse filter values
 
-      return fieldValue.toLowerCase().includes(filter.toLowerCase());
+      return Object.keys(searchValues).every((field) => {
+        if (!searchValues[field]) return true; // Skip empty filters
+
+        let fieldValue: string = '';
+
+        // Responsible User Filter
+        if (field === 'responsible_user' && data.responsible_user) {
+          fieldValue = data.responsible_user.name || '';
+          return fieldValue
+            .toLowerCase()
+            .includes(searchValues[field].toLowerCase());
+        }
+
+        // Status Filter (Exact Match)
+        if (field === 'status' && data.status) {
+          return (
+            data.status.toLowerCase() === searchValues[field].toLowerCase()
+          );
+        }
+
+        // Description Filter (Partial Match)
+        if (field === 'description' && data.description) {
+          return data.description
+            .toLowerCase()
+            .includes(searchValues[field].toLowerCase());
+        }
+
+        // Task Name Filter
+        if (field === 'name' && data.name) {
+          return data.name
+            .toLowerCase()
+            .includes(searchValues[field].toLowerCase());
+        }
+
+        // Convert task dates to timestamps
+        const taskStartDate = data.start_date
+          ? new Date(data.start_date).getTime()
+          : null;
+        const taskEndDate = data.end_date
+          ? new Date(data.end_date).getTime()
+          : null;
+
+        // Convert filter dates to timestamps
+        const filterStartDate = searchValues.startDate
+          ? new Date(searchValues.startDate).getTime()
+          : null;
+        const filterEndDate = searchValues.endDate
+          ? new Date(searchValues.endDate).getTime()
+          : null;
+
+        // ✅ Keep task visible if:
+        // - Its start date is within the filter range
+        // - OR its end date is within the filter range
+        if (
+          (filterStartDate || filterEndDate) &&
+          (taskStartDate || taskEndDate)
+        ) {
+          return (
+            (taskStartDate &&
+              filterStartDate &&
+              taskStartDate >= filterStartDate &&
+              (!filterEndDate || taskStartDate <= filterEndDate)) ||
+            (taskEndDate &&
+              filterStartDate &&
+              taskEndDate >= filterStartDate &&
+              (!filterEndDate || taskEndDate <= filterEndDate))
+          );
+        }
+
+        return true; // Default case (no filter applied)
+      });
     };
   }
 
@@ -340,6 +413,9 @@ export class ProjectDetailsComponent implements OnInit {
         this.taskService.createTask(formattedResult).subscribe({
           next: (response) => {
             console.log('Task created successfully:', response);
+            this.snackBar.open('Task created successfully!', 'Dismiss', {
+              panelClass: ['success-snackbar'],
+            });
             // Forces component to reload in order to show changes in the list.
             this.ngZone.run(() => {
               this.ngOnInit();
@@ -347,6 +423,9 @@ export class ProjectDetailsComponent implements OnInit {
           },
           error: (error) => {
             console.error('Error creating task:', error);
+            this.snackBar.open('Error creating task!', 'Dismiss', {
+              panelClass: ['error-snackbar'],
+            });
             // Forces component to reload in order to show changes in the list.
             this.ngZone.run(() => {
               this.ngOnInit();
@@ -377,14 +456,20 @@ export class ProjectDetailsComponent implements OnInit {
 
         this.taskService.editTask(formattedResult, id).subscribe({
           next: (response) => {
-            console.log('Task created successfully:', response);
+            console.log('Task updated successfully:', response);
+            this.snackBar.open('Task updated successfully!', 'Dismiss', {
+              panelClass: ['success-snackbar'],
+            });
             // Forces component to reload in order to show changes in the list.
             this.ngZone.run(() => {
               this.ngOnInit();
             });
           },
           error: (error) => {
-            console.error('Error creating task:', error);
+            console.error('Error updating task:', error);
+            this.snackBar.open('Error updating task!', 'Dismiss', {
+              panelClass: ['error-snackbar'],
+            });
             // Forces component to reload in order to show changes in the list.
             this.ngZone.run(() => {
               this.ngOnInit();
@@ -405,6 +490,9 @@ export class ProjectDetailsComponent implements OnInit {
         this.taskService.deleteTask(id).subscribe({
           next: (response) => {
             console.log('task deleted successfully:', response);
+            this.snackBar.open('Task deleted successfully!', 'Dismiss', {
+              panelClass: ['success-snackbar'],
+            });
             // Forces component to reload in order to show changes in the list.
             this.ngZone.run(() => {
               this.ngOnInit();
@@ -412,6 +500,9 @@ export class ProjectDetailsComponent implements OnInit {
           },
           error: (error) => {
             console.error('error deleting task:', error);
+            this.snackBar.open('Error deleting task!', 'Dismiss', {
+              panelClass: ['error-snackbar'],
+            });
             // Forces component to reload in order to show changes in the list.
             this.ngZone.run(() => {
               this.ngOnInit();

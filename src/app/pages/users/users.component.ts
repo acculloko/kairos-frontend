@@ -22,6 +22,7 @@ import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { UserEditingFormComponent } from '../../components/user/user-editing-form/user-editing-form.component';
 import { AuthService } from '../../services/auth/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-users',
@@ -38,7 +39,7 @@ import { AuthService } from '../../services/auth/auth.service';
     MatIconModule,
   ],
   templateUrl: './users.component.html',
-  styleUrl: './users.component.scss',
+  styleUrls: ['./users.component.scss', '../../../styles.scss'],
 })
 export class UsersComponent implements OnInit {
   dialog = inject(MatDialog);
@@ -46,6 +47,8 @@ export class UsersComponent implements OnInit {
   dateService = inject(DateService);
   authService = inject(AuthService);
   ngZone = inject(NgZone);
+
+  snackBar = inject(MatSnackBar);
 
   role: string = '';
 
@@ -109,6 +112,9 @@ export class UsersComponent implements OnInit {
         console.log(this.userDataSource);
       },
       error: (err) => {
+        this.snackBar.open("Couldn't get users!", 'Dismiss', {
+          panelClass: ['error-snackbar'],
+        });
         console.error(err);
         throw err;
       },
@@ -191,6 +197,9 @@ export class UsersComponent implements OnInit {
         this.userService.createUser(formattedResult).subscribe({
           next: (response) => {
             console.log('user created successfully:', response);
+            this.snackBar.open('User created successfully!', 'Dismiss', {
+              panelClass: ['success-snackbar'],
+            });
             // Forces component to reload in order to show changes in the list.
             this.ngZone.run(() => {
               this.ngOnInit();
@@ -198,6 +207,9 @@ export class UsersComponent implements OnInit {
           },
           error: (error) => {
             console.error('error creating user:', error);
+            this.snackBar.open('Error creating user!', 'Dismiss', {
+              panelClass: ['error-snackbar'],
+            });
             // Forces component to reload in order to show changes in the list.
             this.ngZone.run(() => {
               this.ngOnInit();
@@ -224,14 +236,20 @@ export class UsersComponent implements OnInit {
         };
         this.userService.editUser(formattedResult, id).subscribe({
           next: (response) => {
-            console.log('user edited successfully:', response);
+            console.log('user updated successfully:', response);
+            this.snackBar.open('User updated successfully!', 'Dismiss', {
+              panelClass: ['success-snackbar'],
+            });
             // Forces component to reload in order to show changes in the list.
             this.ngZone.run(() => {
               this.ngOnInit();
             });
           },
           error: (error) => {
-            console.error('error editing user:', error);
+            console.error('error updating user:', error);
+            this.snackBar.open('Error updating user!', 'Dismiss', {
+              panelClass: ['error-snackbar'],
+            });
             // Forces component to reload in order to show changes in the list.
             this.ngZone.run(() => {
               this.ngOnInit();
@@ -252,6 +270,9 @@ export class UsersComponent implements OnInit {
         this.userService.deleteUser(id).subscribe({
           next: (response) => {
             console.log('user deleted successfully:', response);
+            this.snackBar.open('User deleted successfully!', 'Dismiss', {
+              panelClass: ['success-snackbar'],
+            });
             // Forces component to reload in order to show changes in the list.
             this.ngZone.run(() => {
               this.ngOnInit();
@@ -259,6 +280,9 @@ export class UsersComponent implements OnInit {
           },
           error: (error) => {
             console.error('error deleting user:', error);
+            this.snackBar.open('Error deleting user!', 'Dismiss', {
+              panelClass: ['error-snackbar'],
+            });
             // Forces component to reload in order to show changes in the list.
             this.ngZone.run(() => {
               this.ngOnInit();

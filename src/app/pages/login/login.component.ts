@@ -6,12 +6,15 @@ import { UserService } from '../../services/user/user.service';
 import { catchError } from 'rxjs';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule],
+  imports: [FormsModule, MatInputModule, MatFormFieldModule, MatButtonModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
+  styleUrls: ['./login.component.scss', '../../../styles.scss'],
 })
 export class LoginComponent {
   userService = inject(UserService);
@@ -33,17 +36,16 @@ export class LoginComponent {
       .pipe(
         catchError((err) => {
           console.log(err);
-          this.snackBar.open('Something went wrong!', 'Close');
+          this.snackBar.open('Login failed, try again.', 'Dismiss', {
+            panelClass: ['error-snackbar'],
+          });
           throw err;
         })
       )
       .subscribe((res: any) => {
         if (res.token) {
           localStorage.setItem('Token', res.token);
-          this.snackBar.open(
-            'Welcome ' + this.authService.getUserInfo()?.name,
-            'Close'
-          );
+          this.snackBar.open('Welcome ' + this.authService.getUserInfo()?.name);
           this.router.navigateByUrl('dashboard');
         }
       });

@@ -24,13 +24,32 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-::ng-deep .custom-snackbar {
+::ng-deep .success-snackbar {
   > div {
-    background-color: #4caf50 !important;
-    color: white;
-    font-weight: bold;
-    border-radius: 8px;
-    padding: 16px;
+    background-color: #1aba1a !important;
+    color: white !important;
+    font-weight: bold !important;
+    // border-radius: 8px;
+    // padding: 16px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+
+    button {
+      color: white !important;
+    }
+  }
+}
+
+::ng-deep .error-snackbar {
+  > div {
+    background-color: var(--mat-sys-error) !important;
+    color: var(--mat-sys-on-error) !important;
+    font-weight: bold !important;
+    // border-radius: 8px;
+    // padding: 16px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+
+    button {
+      color: var(--mat-sys-on-error) !important;
+    }
   }
 }

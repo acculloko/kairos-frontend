@@ -33,7 +33,7 @@ import { ActiveProjectsComponent } from '../../components/dashboard/active-proje
     ActiveProjectsComponent,
   ],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss',
+  styleUrls: ['./dashboard.component.scss', '../../../styles.scss'],
 })
 export class DashboardComponent implements OnInit {
   authService = inject(AuthService);
@@ -41,7 +41,7 @@ export class DashboardComponent implements OnInit {
   taskService = inject(TaskService);
   timelogService = inject(TimelogService);
   breakpointObserver = inject(BreakpointObserver);
-  matSnackBar = inject(MatSnackBar);
+  snackBar = inject(MatSnackBar);
 
   role: string = this.authService.getUserInfo()?.role ?? '';
 
@@ -127,6 +127,13 @@ export class DashboardComponent implements OnInit {
         next: (response: any) => {
           this.nHours = response.total;
         },
+        error: (err) => {
+          this.snackBar.open("Couldn't get My Total Hours!", 'Dismiss', {
+            panelClass: ['error-snackbar'],
+          });
+          console.error(err);
+          throw err;
+        },
       });
   }
 
@@ -134,6 +141,13 @@ export class DashboardComponent implements OnInit {
     this.timelogService.getTotalHours().subscribe({
       next: (response: any) => {
         this.totalHours = response.total;
+      },
+      error: (err) => {
+        this.snackBar.open("Couldn't get Total Hours!", 'Dismiss', {
+          panelClass: ['error-snackbar'],
+        });
+        console.error(err);
+        throw err;
       },
     });
   }
@@ -145,6 +159,13 @@ export class DashboardComponent implements OnInit {
         next: (response: any) => {
           this.nTasks = response.count;
         },
+        error: (err) => {
+          this.snackBar.open("Couldn't get My Active Tasks!", 'Dismiss', {
+            panelClass: ['error-snackbar'],
+          });
+          console.error(err);
+          throw err;
+        },
       });
   }
 
@@ -152,6 +173,13 @@ export class DashboardComponent implements OnInit {
     this.taskService.getTotalActiveTasks().subscribe({
       next: (response: any) => {
         this.totalTasks = response.count;
+      },
+      error: (err) => {
+        this.snackBar.open("Couldn't get Total Active Tasks!", 'Dismiss', {
+          panelClass: ['error-snackbar'],
+        });
+        console.error(err);
+        throw err;
       },
     });
   }
@@ -207,6 +235,9 @@ export class DashboardComponent implements OnInit {
         console.log(this.overdueTaskDataSource);
       },
       error: (err) => {
+        this.snackBar.open("Couldn't get Overdue Tasks!", 'Dismiss', {
+          panelClass: ['error-snackbar'],
+        });
         console.error(err);
         throw err;
       },
@@ -272,6 +303,9 @@ export class DashboardComponent implements OnInit {
           console.log(this.upcomingTaskDataSource);
         },
         error: (err) => {
+          this.snackBar.open("Couldn't get Upcoming Tasks!", 'Dismiss', {
+            panelClass: ['error-snackbar'],
+          });
           console.error(err);
           throw err;
         },

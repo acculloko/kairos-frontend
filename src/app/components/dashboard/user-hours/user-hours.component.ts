@@ -19,6 +19,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-user-hours',
@@ -33,13 +34,15 @@ import { MatCardModule } from '@angular/material/card';
     ReactiveFormsModule,
   ],
   templateUrl: './user-hours.component.html',
-  styleUrl: './user-hours.component.scss',
+  styleUrls: ['./user-hours.component.scss', '../../../../styles.scss'],
 })
 export class UserHoursComponent implements OnInit {
   authService = inject(AuthService);
   userService = inject(UserService);
   timelogService = inject(TimelogService);
   dateService = inject(DateService);
+
+  snackBar = inject(MatSnackBar);
 
   form: FormGroup;
 
@@ -96,6 +99,13 @@ export class UserHoursComponent implements OnInit {
       .subscribe({
         next: (response: any) => {
           this.totalHours = response.total;
+        },
+        error: (err) => {
+          this.snackBar.open("Couldn't get Total Hours by Period!", 'Dismiss', {
+            panelClass: ['error-snackbar'],
+          });
+          console.error(err);
+          throw err;
         },
       });
   }
