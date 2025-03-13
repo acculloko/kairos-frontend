@@ -16,6 +16,7 @@ import { TaskService } from '../../../services/task/task.service';
 import { DateService } from '../../../services/date.service';
 import { AuthService } from '../../../services/auth/auth.service';
 import { Timelog } from '../../../models/timelog/timelog.type';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-admin-timelogger',
@@ -30,6 +31,7 @@ import { Timelog } from '../../../models/timelog/timelog.type';
     MatSelectModule,
     FormsModule,
     MatIconModule,
+    MatCardModule,
   ],
   templateUrl: './admin-timelogger.component.html',
   styleUrl: './admin-timelogger.component.scss',

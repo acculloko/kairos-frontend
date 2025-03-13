@@ -20,6 +20,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { TaskCreationFormComponent } from '../../components/task/task-creation-form/task-creation-form.component';
 import { TaskEditingFormComponent } from '../../components/task/task-editing-form/task-editing-form.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-tasks',
@@ -34,6 +35,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatSelectModule,
     FormsModule,
     MatIconModule,
+    MatCardModule,
   ],
   templateUrl: './tasks.component.html',
   styleUrls: ['./tasks.component.scss', '../../../styles.scss'],

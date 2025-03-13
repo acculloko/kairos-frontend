@@ -26,6 +26,7 @@ import { TaskCreationFormComponent } from '../../task/task-creation-form/task-cr
 import { TaskEditingFormComponent } from '../../task/task-editing-form/task-editing-form.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-project-details',
@@ -41,6 +42,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     FormsModule,
     MatIconModule,
     MatDatepickerModule,
+    MatCardModule,
   ],
   templateUrl: './project-details.component.html',
   styleUrls: ['./project-details.component.scss', '../../../../styles.scss'],
@@ -134,6 +136,7 @@ export class ProjectDetailsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
+      console.log('result', result);
       if (result) {
         const formattedResult: ProjectCreationRequest = {
           name: result.name,

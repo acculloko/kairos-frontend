@@ -1,133 +1,145 @@
 <h1>Users</h1>
 
-<div class="table-header">
-  <mat-form-field appearance="outline">
-    <mat-label>Filter by</mat-label>
-    <mat-select [(ngModel)]="selectedFilterField">
-      <mat-option *ngFor="let field of filterableFields" [value]="field.value">
-        {{ field.label }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+<mat-card class="table-card">
+  <mat-card-content>
+    <div class="table-header">
+      <mat-form-field appearance="outline">
+        <mat-label>Filter by</mat-label>
+        <mat-select [(ngModel)]="selectedFilterField">
+          <mat-option
+            *ngFor="let field of filterableFields"
+            [value]="field.value"
+          >
+            {{ field.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Filter</mat-label>
-    <input matInput (keyup)="onSearch($event)" />
-  </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="onSearch($event)" />
+      </mat-form-field>
 
-  <button mat-button color="primary" (click)="createUser()">
-    Create User
-    <mat-icon iconPositionEnd class="right-icon">add</mat-icon>
-  </button>
-</div>
-
-<table mat-table [dataSource]="userDataSource" matSort class="mat-elevation-z8">
-  <!-- Columns Definition -->
-  <!-- ID -->
-  <ng-container matColumnDef="id">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      mat-sort-header
-      sortActionDescription="Sort by ID"
-    >
-      ID
-    </th>
-    <td mat-cell *matCellDef="let entry">{{ entry.id }}</td>
-  </ng-container>
-
-  <!-- Name -->
-  <ng-container matColumnDef="name">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      mat-sort-header
-      sortActionDescription="Sort by Name"
-    >
-      Name
-    </th>
-    <td mat-cell *matCellDef="let entry">{{ entry.name }}</td>
-  </ng-container>
-
-  <!-- Email -->
-  <ng-container matColumnDef="email">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      mat-sort-header
-      sortActionDescription="Sort by E-mail"
-    >
-      E-mail
-    </th>
-    <td mat-cell *matCellDef="let entry">{{ entry.email }}</td>
-  </ng-container>
-
-  <!-- Creation Date -->
-  <ng-container matColumnDef="creation_date">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      mat-sort-header
-      sortActionDescription="Sort by Creation Date"
-    >
-      Creation Date
-    </th>
-    <td mat-cell *matCellDef="let entry">
-      {{ entry.creation_date | date : "dd/MM/yyyy HH:mm:ss" }}
-    </td>
-  </ng-container>
-
-  <!-- Last Login -->
-  <ng-container matColumnDef="last_login">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      mat-sort-header
-      sortActionDescription="Sort by Last Login"
-    >
-      Last Login
-    </th>
-    <td mat-cell *matCellDef="let entry">
-      {{
-        entry.last_login
-          ? (entry.last_login | date : "dd/MM/yyyy HH:mm:ss")
-          : "Never logged in"
-      }}
-    </td>
-  </ng-container>
-
-  <!-- Role -->
-  <ng-container matColumnDef="role">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      mat-sort-header
-      sortActionDescription="Sort by Role"
-    >
-      Role
-    </th>
-    <td mat-cell *matCellDef="let entry">{{ entry.role }}</td>
-  </ng-container>
-
-  <!-- Action Column -->
-  <ng-container matColumnDef="actions">
-    <th mat-header-cell *matHeaderCellDef></th>
-    <td mat-cell *matCellDef="let entry">
-      <button mat-icon-button (click)="editUser(entry.id)">
-        <mat-icon class="table-icon">edit</mat-icon>
+      <button mat-button color="primary" (click)="createUser()">
+        Create User
+        <mat-icon iconPositionEnd class="right-icon">add</mat-icon>
       </button>
-      <button mat-icon-button (click)="deleteUser(entry.id)">
-        <mat-icon class="table-icon">delete</mat-icon>
-      </button>
-    </td>
-  </ng-container>
+    </div>
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-</table>
+    <table
+      mat-table
+      [dataSource]="userDataSource"
+      matSort
+      class="mat-elevation-z8"
+    >
+      <!-- Columns Definition -->
+      <!-- ID -->
+      <ng-container matColumnDef="id">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+          sortActionDescription="Sort by ID"
+        >
+          ID
+        </th>
+        <td mat-cell *matCellDef="let entry">{{ entry.id }}</td>
+      </ng-container>
 
-<mat-paginator
-  [pageSize]="10"
-  [pageSizeOptions]="[5, 10, 20]"
-  showFirstLastButtons
-></mat-paginator>
+      <!-- Name -->
+      <ng-container matColumnDef="name">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+          sortActionDescription="Sort by Name"
+        >
+          Name
+        </th>
+        <td mat-cell *matCellDef="let entry">{{ entry.name }}</td>
+      </ng-container>
+
+      <!-- Email -->
+      <ng-container matColumnDef="email">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+          sortActionDescription="Sort by E-mail"
+        >
+          E-mail
+        </th>
+        <td mat-cell *matCellDef="let entry">{{ entry.email }}</td>
+      </ng-container>
+
+      <!-- Creation Date -->
+      <ng-container matColumnDef="creation_date">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+          sortActionDescription="Sort by Creation Date"
+        >
+          Creation Date
+        </th>
+        <td mat-cell *matCellDef="let entry">
+          {{ entry.creation_date | date : "dd/MM/yyyy HH:mm:ss" }}
+        </td>
+      </ng-container>
+
+      <!-- Last Login -->
+      <ng-container matColumnDef="last_login">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+          sortActionDescription="Sort by Last Login"
+        >
+          Last Login
+        </th>
+        <td mat-cell *matCellDef="let entry">
+          {{
+            entry.last_login
+              ? (entry.last_login | date : "dd/MM/yyyy HH:mm:ss")
+              : "Never logged in"
+          }}
+        </td>
+      </ng-container>
+
+      <!-- Role -->
+      <ng-container matColumnDef="role">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+          sortActionDescription="Sort by Role"
+        >
+          Role
+        </th>
+        <td mat-cell *matCellDef="let entry">{{ entry.role }}</td>
+      </ng-container>
+
+      <!-- Action Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let entry">
+          <button mat-icon-button (click)="editUser(entry.id)">
+            <mat-icon class="table-icon">edit</mat-icon>
+          </button>
+          <button mat-icon-button (click)="deleteUser(entry.id)">
+            <mat-icon class="table-icon">delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <mat-paginator
+      [pageSize]="10"
+      [pageSizeOptions]="[5, 10, 20]"
+      showFirstLastButtons
+    ></mat-paginator>
+  </mat-card-content>
+</mat-card>

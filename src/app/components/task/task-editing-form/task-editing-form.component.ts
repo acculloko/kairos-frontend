@@ -130,6 +130,7 @@ export class TaskEditingFormComponent implements OnInit {
   }
 
   closeDialog() {
-    this.dialogRef.close();
+    this.form.reset();
+    this.dialogRef.close(null);
   }
 }

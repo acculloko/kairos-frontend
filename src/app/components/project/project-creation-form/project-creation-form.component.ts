@@ -81,6 +81,7 @@ export class ProjectCreationFormComponent {
   }
 
   closeDialog() {
-    this.dialogRef.close();
+    this.form.reset();
+    this.dialogRef.close(null);
   }
 }

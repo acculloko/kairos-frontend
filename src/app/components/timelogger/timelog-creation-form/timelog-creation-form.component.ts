@@ -137,6 +137,7 @@ export class TimelogCreationFormComponent {
   }
 
   closeDialog() {
-    this.dialogRef.close();
+    this.form.reset();
+    this.dialogRef.close(null);
   }
 }

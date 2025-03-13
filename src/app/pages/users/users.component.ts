@@ -23,6 +23,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { UserEditingFormComponent } from '../../components/user/user-editing-form/user-editing-form.component';
 import { AuthService } from '../../services/auth/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-users',
@@ -37,6 +38,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatSelectModule,
     FormsModule,
     MatIconModule,
+    MatCardModule,
   ],
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss', '../../../styles.scss'],

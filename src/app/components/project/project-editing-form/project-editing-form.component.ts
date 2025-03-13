@@ -68,12 +68,14 @@ export class ProjectEditingFormComponent implements OnInit {
   ngOnInit(): void {
     this.projectService.getProjectById(this.data.id).subscribe((entry) => {
       this.form.patchValue(entry);
+      if (entry.responsible_user) {
+        this.form.patchValue({ responsible_user: entry.responsible_user.name });
+        this.selectedUserId = entry.responsible_user.id;
+      }
       this.form.patchValue({
-        responsible_user: entry.responsible_user.name,
         start_date: this.dateService.parseDate(entry.start_date, 'dd/MM/yyyy'),
         end_date: this.dateService.parseDate(entry.end_date, 'dd/MM/yyyy'),
       });
-      this.selectedUserId = entry.responsible_user.id;
     });
   }
 
@@ -102,6 +104,7 @@ export class ProjectEditingFormComponent implements OnInit {
   }
 
   closeDialog() {
-    this.dialogRef.close();
+    this.form.reset();
+    this.dialogRef.close(null);
   }
 }

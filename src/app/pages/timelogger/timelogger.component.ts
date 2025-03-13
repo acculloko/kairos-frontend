@@ -25,6 +25,7 @@ import { TimelogEditingFormComponent } from '../../components/timelogger/timelog
 import { TimelogDeleteConfirmationComponent } from '../../components/timelogger/timelog-delete-confirmation/timelog-delete-confirmation.component';
 import { AdminTimeloggerComponent } from '../../components/timelogger/admin-timelogger/admin-timelogger.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-timelogger',
@@ -40,6 +41,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     FormsModule,
     MatIconModule,
     AdminTimeloggerComponent,
+    MatCardModule,
   ],
   templateUrl: './timelogger.component.html',
   styleUrls: ['./timelogger.component.scss', '../../../styles.scss'],

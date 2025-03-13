@@ -1,3 +1,65 @@
+.project-details-card {
+  margin-bottom: 24px;
+}
+
+.outer-header {
+  display: flex;
+  flex-direction: column; /* Ensures the subtitle stays below */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.card-title {
+  font-weight: bold;
+  font-size: 1.8rem;
+}
+
+.project-options {
+  display: flex;
+  gap: 12px;
+  button {
+    white-space: nowrap; /* Prevents text from wrapping */
+    font-size: medium;
+  }
+}
+
+.info-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 6px;
+}
+
+.right-info {
+  margin-right: 16px;
+}
+
+.filter-container {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 equal columns */
+  grid-template-rows: repeat(2, auto); /* 2 rows, auto height */
+  gap: 16px; /* Adds space between fields */
+  align-items: center;
+  width: 100%;
+}
+
+.reset-button {
+  font-size: medium;
+  justify-self: end; /* Push it to the right */
+  align-self: end; /* Push it to the bottom */
+  grid-column: 4;
+  grid-row: 2;
+}
+
 .description {
   white-space: nowrap;
   overflow: hidden;

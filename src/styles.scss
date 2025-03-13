@@ -53,8 +53,15 @@ body {
   }
 }
 
+::ng-deep .table-card {
+  table,
+  mat-paginator {
+    background-color: var(--mdc-elevated-card-container-color);
+  }
+}
+
 ::ng-deep .table-header {
-  margin-top: 60px;
+  margin-top: 16px;
   display: flex;
   align-items: center;
   gap: 16px; /* Space between form fields */

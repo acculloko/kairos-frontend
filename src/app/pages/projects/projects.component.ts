@@ -25,6 +25,7 @@ import { FormsModule } from '@angular/forms';
 import { ProjectCreationFormComponent } from '../../components/project/project-creation-form/project-creation-form.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-projects',
@@ -39,6 +40,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatSelectModule,
     FormsModule,
     MatIconModule,
+    MatCardModule,
   ],
   templateUrl: './projects.component.html',
   styleUrls: ['./projects.component.scss', '../../../styles.scss'],
