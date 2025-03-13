@@ -72,7 +72,7 @@ export class ProjectDetailsComponent implements OnInit {
     'start_date',
     'end_date',
     'status',
-    'creation_date',
+    // 'creation_date',
     'actions',
   ];
 

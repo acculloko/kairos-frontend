@@ -62,7 +62,7 @@ export class TasksComponent implements OnInit {
     'start_date',
     'end_date',
     'status',
-    'creation_date',
+    // 'creation_date',
     'actions',
   ];
 
@@ -76,7 +76,7 @@ export class TasksComponent implements OnInit {
     { label: 'Start Date', value: 'start_date' },
     { label: 'End Date', value: 'end_date' },
     { label: 'Status', value: 'status' },
-    { label: 'Creation Date', value: 'creation_date' },
+    // { label: 'Creation Date', value: 'creation_date' },
   ];
 
   taskList: Array<Task> = [];
@@ -169,16 +169,18 @@ export class TasksComponent implements OnInit {
       } else if (this.selectedFilterField === 'end_date' && data.end_date) {
         fieldValue =
           this.dateService.formatDate(data.end_date, 'dd/MM/yyyy') || '';
-      } else if (
-        this.selectedFilterField === 'creation_date' &&
-        data.creation_date
-      ) {
-        fieldValue =
-          this.dateService.formatDate(
-            data.creation_date,
-            'dd/MM/yyyy HH:mm:ss'
-          ) || '';
-      } else if (
+      }
+      // else if (
+      //   this.selectedFilterField === 'creation_date' &&
+      //   data.creation_date
+      // ) {
+      //   fieldValue =
+      //     this.dateService.formatDate(
+      //       data.creation_date,
+      //       'dd/MM/yyyy HH:mm:ss'
+      //     ) || '';
+      // }
+      else if (
         this.selectedFilterField === 'responsible_user.name' &&
         data.responsible_user
       ) {
