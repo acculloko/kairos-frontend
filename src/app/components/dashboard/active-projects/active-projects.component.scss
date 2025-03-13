@@ -1,6 +1,23 @@
-.outer-div {
+.outer-active-projects-div {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
   padding-top: 16px;
+  padding-bottom: 16px;
+  box-sizing: border-box;
+}
+
+.left-div {
+  padding-bottom: 24px;
+}
+
+.graph-div {
+  height: 275px;
+  width: 45%;
+  padding-bottom: 40px;
+}
+
+mat-form-field {
+  margin-top: 24px;
+  margin-bottom: 24px;
 }

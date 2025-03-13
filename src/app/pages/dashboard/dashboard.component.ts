@@ -104,10 +104,19 @@ export class DashboardComponent implements OnInit {
 
     // Changes column number based on screen size
     this.breakpointObserver
-      .observe([Breakpoints.Medium, Breakpoints.Large])
+      .observe([
+        Breakpoints.XSmall,
+        Breakpoints.Small,
+        Breakpoints.Medium,
+        Breakpoints.Large,
+      ])
       .pipe(
         map((result) => {
-          if (result.breakpoints[Breakpoints.Medium]) {
+          if (result.breakpoints[Breakpoints.XSmall]) {
+            return 2;
+          } else if (result.breakpoints[Breakpoints.Small]) {
+            return 2;
+          } else if (result.breakpoints[Breakpoints.Medium]) {
             return 2;
           } else if (result.breakpoints[Breakpoints.Large]) {
             return 4;

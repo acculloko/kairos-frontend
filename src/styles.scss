@@ -53,3 +53,7 @@ body {
     }
   }
 }
+
+::ng-deep .table-icon {
+  color: var(--mat-sys-primary);
+}

@@ -171,6 +171,7 @@ export class ActiveProjectsComponent implements OnInit {
         ],
       },
       options: {
+        maintainAspectRatio: false,
         responsive: true,
       },
     });
