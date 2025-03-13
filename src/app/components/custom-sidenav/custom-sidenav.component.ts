@@ -1,8 +1,9 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
+import { MatButtonModule } from '@angular/material/button';
 
 export type MenuItem = {
   icon: string;
@@ -12,12 +13,13 @@ export type MenuItem = {
 
 @Component({
   selector: 'app-custom-sidenav',
-  imports: [RouterModule, MatIconModule, MatListModule],
+  imports: [RouterModule, MatIconModule, MatListModule, MatButtonModule],
   templateUrl: './custom-sidenav.component.html',
-  styleUrl: './custom-sidenav.component.scss',
+  styleUrls: ['./custom-sidenav.component.scss', '../../../styles.scss'],
 })
 export class CustomSidenavComponent implements OnInit {
   authService = inject(AuthService);
+  router = inject(Router);
 
   name: string = this.authService.getUserInfo()?.name ?? '';
   role: string = this.authService.getUserInfo()?.role ?? '';
@@ -75,5 +77,10 @@ export class CustomSidenavComponent implements OnInit {
         },
       ]);
     }
+  }
+
+  logout() {
+    this.router.navigate(['']);
+    localStorage.removeItem('Token');
   }
 }

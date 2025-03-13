@@ -1,15 +1,26 @@
 <div class="sidenav-header">
+  <div class="logo-div">
+    <img
+      src="../../../assets/kairos-high-resolution-logo-transparent-cropped.svg"
+      alt="Kairos logo"
+      class="logo"
+    />
+  </div>
   <mat-icon fontIcon="account_circle" class="user-icon"></mat-icon>
   <div class="header-text">
     <h2>{{ this.name }}</h2>
     <p>{{ this.role }}</p>
   </div>
 </div>
-<mat-nav-list>
+<mat-nav-list class="menu-list">
   @for (item of menuItems(); track $index) {
   <a mat-list-item [routerLink]="item.route">
-    <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+    <mat-icon class="sidebar-icon" matListItemIcon>{{ item.icon }}</mat-icon>
     <span matListItemTitle>{{ item.label }}</span>
   </a>
   }
+  <a mat-list-item class="logout-button" (click)="logout()">
+    <mat-icon class="sidebar-icon" matListItemIcon>logout</mat-icon>
+    <span matListItemTitle>Logout</span>
+  </a>
 </mat-nav-list>
