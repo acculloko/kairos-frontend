@@ -80,3 +80,15 @@ body {
 ::ng-deep .sidebar-icon {
   color: var(--mat-sys-primary) !important;
 }
+
+::ng-deep .dialog-form {
+  display: flex;
+  flex-direction: column;
+  mat-form-field {
+    margin-top: 10px !important;
+  }
+}
+
+::ng-deep .delete-content {
+  font-size: medium !important;
+}

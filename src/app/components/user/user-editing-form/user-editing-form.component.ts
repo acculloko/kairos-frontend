@@ -27,7 +27,7 @@ import { UserService } from '../../../services/user/user.service';
     MatSelectModule,
   ],
   templateUrl: './user-editing-form.component.html',
-  styleUrl: './user-editing-form.component.scss',
+  styleUrls: ['./user-editing-form.component.scss', '../../../../styles.scss'],
 })
 export class UserEditingFormComponent implements OnInit {
   form: FormGroup;

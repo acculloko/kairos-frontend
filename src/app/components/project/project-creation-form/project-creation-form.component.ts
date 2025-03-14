@@ -31,7 +31,10 @@ import { UserService } from '../../../services/user/user.service';
     CommonModule,
   ],
   templateUrl: './project-creation-form.component.html',
-  styleUrl: './project-creation-form.component.scss',
+  styleUrls: [
+    './project-creation-form.component.scss',
+    '../../../../styles.scss',
+  ],
 })
 export class ProjectCreationFormComponent {
   userService = inject(UserService);

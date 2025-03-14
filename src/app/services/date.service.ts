@@ -11,6 +11,15 @@ export class DateService {
     return isValid(parsedDate) ? parsedDate : null;
   }
 
+  convertToDate(dateString: string): Date {
+    // Expected format: "dd/MM/yyyy HH:mm:ss"
+    const [datePart, timePart] = dateString.split(' ');
+    const [day, month, year] = datePart.split('/').map(Number);
+    const [hours, minutes, seconds] = timePart.split(':').map(Number);
+
+    return new Date(year, month - 1, day, hours, minutes, seconds);
+  }
+
   formatDate(date: string, dateFormat: string): string {
     if (!date) return '';
     return format(new Date(date), dateFormat);

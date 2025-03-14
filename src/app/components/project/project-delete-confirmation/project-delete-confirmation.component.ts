@@ -6,7 +6,10 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
   selector: 'app-project-delete-confirmation',
   imports: [MatButtonModule, MatDialogModule],
   templateUrl: './project-delete-confirmation.component.html',
-  styleUrl: './project-delete-confirmation.component.scss',
+  styleUrls: [
+    './project-delete-confirmation.component.scss',
+    '../../../../styles.scss',
+  ],
 })
 export class ProjectDeleteConfirmationComponent {
   constructor(

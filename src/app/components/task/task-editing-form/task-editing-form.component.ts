@@ -38,7 +38,7 @@ import { DateService } from '../../../services/date.service';
     CommonModule,
   ],
   templateUrl: './task-editing-form.component.html',
-  styleUrl: './task-editing-form.component.scss',
+  styleUrls: ['./task-editing-form.component.scss', '../../../../styles.scss'],
 })
 export class TaskEditingFormComponent implements OnInit {
   userService = inject(UserService);

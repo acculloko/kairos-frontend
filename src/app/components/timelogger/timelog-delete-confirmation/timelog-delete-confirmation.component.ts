@@ -6,7 +6,10 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
   selector: 'app-timelog-delete-confirmation',
   imports: [MatButtonModule, MatDialogModule],
   templateUrl: './timelog-delete-confirmation.component.html',
-  styleUrl: './timelog-delete-confirmation.component.scss',
+  styleUrls: [
+    './timelog-delete-confirmation.component.scss',
+    '../../../../styles.scss',
+  ],
 })
 export class TimelogDeleteConfirmationComponent {
   constructor(

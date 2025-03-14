@@ -24,6 +24,7 @@ import { ProjectService } from '../../../services/project/project.service';
 import { TaskService } from '../../../services/task/task.service';
 import { DateService } from '../../../services/date.service';
 import { TimelogService } from '../../../services/timelog/timelog.service';
+import { MatTimepickerModule } from '@angular/material/timepicker';
 
 @Component({
   selector: 'app-timelog-editing-form',
@@ -38,9 +39,13 @@ import { TimelogService } from '../../../services/timelog/timelog.service';
     MatDatepickerModule,
     MatAutocompleteModule,
     CommonModule,
+    MatTimepickerModule,
   ],
   templateUrl: './timelog-editing-form.component.html',
-  styleUrl: './timelog-editing-form.component.scss',
+  styleUrls: [
+    './timelog-editing-form.component.scss',
+    '../../../../styles.scss',
+  ],
 })
 export class TimelogEditingFormComponent implements OnInit {
   userService = inject(UserService);
@@ -57,11 +62,6 @@ export class TimelogEditingFormComponent implements OnInit {
 
   selectedUserId: number | null = null;
 
-  startDate!: Date;
-  startTime!: string;
-  endDate!: Date;
-  endTime!: string;
-
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<TimelogEditingFormComponent>,
@@ -70,9 +70,7 @@ export class TimelogEditingFormComponent implements OnInit {
     this.form = this.fb.group({
       description: ['', Validators.required],
       start_date: ['', Validators.required],
-      start_time: ['', Validators.required],
       end_date: ['', Validators.required],
-      end_time: ['', Validators.required],
       task: ['', Validators.required],
     });
   }
@@ -82,10 +80,8 @@ export class TimelogEditingFormComponent implements OnInit {
       this.form.patchValue(entry);
       this.form.patchValue({
         task: entry.task.name,
-      });
-      this.setInitialDateTimeValues({
-        start: entry.start_date,
-        end: entry.end_date,
+        start_date: this.dateService.convertToDate(entry.start_date),
+        end_date: this.dateService.convertToDate(entry.end_date),
       });
       this.selectedUserId = entry.user.id;
       this.selectedTaskId = entry.task.id;
@@ -112,50 +108,10 @@ export class TimelogEditingFormComponent implements OnInit {
     this.selectedTaskId = task.id;
   }
 
-  combineDateTime(fieldName: string): Date | null {
-    const dateValue = this.form.value[`${fieldName}_date`];
-    const timeValue = this.form.value[`${fieldName}_time`];
-
-    if (!dateValue || !timeValue) {
-      console.error(`${fieldName} date or time is missing!`);
-      return null;
-    }
-
-    const [hours, minutes] = timeValue.split(':').map(Number);
-    const combinedDateTime = new Date(dateValue);
-    combinedDateTime.setHours(hours, minutes, 0);
-
-    return combinedDateTime;
-  }
-
-  setInitialDateTimeValues(data: { start: string; end: string }) {
-    // Convert datetime strings to Date objects
-    const startDateTime = new Date(data.start);
-    const endDateTime = new Date(data.end);
-
-    // Extract only the date part
-    const startDate = startDateTime.toISOString().split('T')[0]; // YYYY-MM-DD
-    const endDate = endDateTime.toISOString().split('T')[0]; // YYYY-MM-DD
-
-    // Extract only the time part in HH:mm format
-    const startTime = startDateTime.toTimeString().slice(0, 5); // HH:mm
-    const endTime = endDateTime.toTimeString().slice(0, 5); // HH:mm
-
-    // Set form values
-    this.form.patchValue({
-      start_date: startDate,
-      start_time: startTime,
-      end_date: endDate,
-      end_time: endTime,
-    });
-  }
-
   submitForm() {
     if (this.form.valid && this.selectedTaskId) {
       this.form.value.user = this.selectedUserId;
       this.form.value.task = this.selectedTaskId;
-      this.form.value.start_date = this.combineDateTime('start');
-      this.form.value.end_date = this.combineDateTime('end');
       console.log('Timelog Form Values:', this.form.value);
       this.dialogRef.close(this.form.value);
     }

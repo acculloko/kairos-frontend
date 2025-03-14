@@ -37,7 +37,10 @@ import { DateService } from '../../../services/date.service';
     CommonModule,
   ],
   templateUrl: './project-editing-form.component.html',
-  styleUrl: './project-editing-form.component.scss',
+  styleUrls: [
+    './project-editing-form.component.scss',
+    '../../../../styles.scss',
+  ],
 })
 export class ProjectEditingFormComponent implements OnInit {
   userService = inject(UserService);

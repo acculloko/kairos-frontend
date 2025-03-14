@@ -22,7 +22,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatSelectModule,
   ],
   templateUrl: './user-creation-form.component.html',
-  styleUrl: './user-creation-form.component.scss',
+  styleUrls: ['./user-creation-form.component.scss', '../../../../styles.scss'],
 })
 export class UserCreationFormComponent {
   form: FormGroup;

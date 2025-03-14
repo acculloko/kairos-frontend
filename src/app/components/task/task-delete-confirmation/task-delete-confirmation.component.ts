@@ -6,7 +6,10 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
   selector: 'app-task-delete-confirmation',
   imports: [MatButtonModule, MatDialogModule],
   templateUrl: './task-delete-confirmation.component.html',
-  styleUrl: './task-delete-confirmation.component.scss',
+  styleUrls: [
+    './task-delete-confirmation.component.scss',
+    '../../../../styles.scss',
+  ],
 })
 export class TaskDeleteConfirmationComponent {
   constructor(

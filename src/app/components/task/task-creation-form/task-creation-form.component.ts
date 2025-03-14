@@ -32,7 +32,7 @@ import { ProjectService } from '../../../services/project/project.service';
     CommonModule,
   ],
   templateUrl: './task-creation-form.component.html',
-  styleUrl: './task-creation-form.component.scss',
+  styleUrls: ['./task-creation-form.component.scss', '../../../../styles.scss'],
 })
 export class TaskCreationFormComponent {
   userService = inject(UserService);

@@ -18,6 +18,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatTimepickerModule } from '@angular/material/timepicker';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../../services/user/user.service';
@@ -38,9 +39,13 @@ import { DateService } from '../../../services/date.service';
     MatDatepickerModule,
     MatAutocompleteModule,
     CommonModule,
+    MatTimepickerModule,
   ],
   templateUrl: './timelog-creation-form.component.html',
-  styleUrl: './timelog-creation-form.component.scss',
+  styleUrls: [
+    './timelog-creation-form.component.scss',
+    '../../../../styles.scss',
+  ],
 })
 export class TimelogCreationFormComponent {
   userService = inject(UserService);
@@ -54,11 +59,6 @@ export class TimelogCreationFormComponent {
   filteredTasks: any[] = [];
   selectedTaskId: number | null = null;
 
-  startDate!: Date;
-  startTime!: string;
-  endDate!: Date;
-  endTime!: string;
-
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<TimelogCreationFormComponent>,
@@ -67,9 +67,7 @@ export class TimelogCreationFormComponent {
     this.form = this.fb.group({
       description: ['', Validators.required],
       start_date: ['', Validators.required],
-      start_time: ['', Validators.required],
       end_date: ['', Validators.required],
-      end_time: ['', Validators.required],
       task: ['', Validators.required],
     });
   }
@@ -92,43 +90,10 @@ export class TimelogCreationFormComponent {
     this.selectedTaskId = task.id;
   }
 
-  combineDateTime(fieldName: string): Date | null {
-    const dateValue = this.form.value[`${fieldName}_date`];
-    const timeValue = this.form.value[`${fieldName}_time`];
-
-    if (!dateValue || !timeValue) {
-      console.error(`${fieldName} date or time is missing!`);
-      return null;
-    }
-
-    const [hours, minutes] = timeValue.split(':').map(Number);
-    const combinedDateTime = new Date(dateValue);
-    combinedDateTime.setHours(hours, minutes, 0);
-
-    return combinedDateTime;
-  }
-
-  dateTimeValidator(group: AbstractControl) {
-    const startDate = group.get('startDate')?.value;
-    const startTime = group.get('startTime')?.value;
-    const endDate = group.get('endDate')?.value;
-    const endTime = group.get('endTime')?.value;
-
-    if (!startDate || !startTime || !endDate || !endTime) return null; // Skip validation if fields are empty
-
-    // Convert to JavaScript Date objects for comparison
-    const start = new Date(`${startDate}T${startTime}`);
-    const end = new Date(`${endDate}T${endTime}`);
-
-    return start < end ? null : { invalidDateRange: true }; // Return error if start >= end
-  }
-
   submitForm() {
     if (this.form.valid && this.selectedTaskId) {
       this.form.value.user = this.authService.getUserInfo()?.id;
       this.form.value.task = this.selectedTaskId;
-      this.form.value.start_date = this.combineDateTime('start');
-      this.form.value.end_date = this.combineDateTime('end');
       console.log('Timelog Form Values:', this.form.value);
       this.dialogRef.close(this.form.value);
     } else {
