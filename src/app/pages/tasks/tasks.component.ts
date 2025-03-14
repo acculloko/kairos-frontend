@@ -71,7 +71,7 @@ export class TasksComponent implements OnInit {
     { label: 'Id', value: 'id' },
     { label: 'Name', value: 'name' },
     { label: 'Description', value: 'description' },
-    { label: 'Project', value: 'project' },
+    { label: 'Project', value: 'project.name' },
     { label: 'Responsible User', value: 'responsible_user.name' },
     { label: 'Start Date', value: 'start_date' },
     { label: 'End Date', value: 'end_date' },
@@ -185,11 +185,13 @@ export class TasksComponent implements OnInit {
         data.responsible_user
       ) {
         fieldValue = data.responsible_user.name || '';
+      } else if (this.selectedFilterField === 'project.name' && data.project) {
+        fieldValue = data.project.name || '';
       } else {
         fieldValue = (data as any)[this.selectedFilterField] || '';
       }
 
-      return fieldValue.toLowerCase().includes(filter.toLowerCase());
+      return fieldValue?.toLowerCase().includes(filter.toLowerCase());
     };
   }
 

@@ -74,10 +74,10 @@ export class TimeloggerComponent implements OnInit {
   filterableFields = [
     { label: 'Id', value: 'id' },
     { label: 'Description', value: 'description' },
-    { label: 'User', value: 'user.name' },
+    // { label: 'User', value: 'user.name' },
     { label: 'Task', value: 'task.name' },
-    { label: 'Start Date', value: 'start_date' },
-    { label: 'End Date', value: 'end_date' },
+    { label: 'Start Time', value: 'start_date' },
+    { label: 'End Time', value: 'end_date' },
     { label: 'Logged At', value: 'log_time' },
   ];
 
